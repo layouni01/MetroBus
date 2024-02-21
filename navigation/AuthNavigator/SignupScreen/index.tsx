@@ -1,19 +1,15 @@
 import { View, Text, Button } from "react-native";
 import React from "react";
-import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
-const LoginScreen = () => {
+const SignupScreen = () => {
   const Navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text>index</Text>
-      <Button
-        title="Login"
-        onPress={() => Navigation.navigate("Signup" as never)}
-      />
+      <Button title="retour" onPress={() => Navigation.navigate("Login")} />
     </View>
   );
 };
 
-export default LoginScreen;
+export default SignupScreen;

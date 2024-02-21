@@ -1,13 +1,18 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-
+import { View, Text } from "react-native";
+import React from "react";
+import AuthNavigator from "../AuthNavigator";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+const MainStack = createNativeStackNavigator();
 //main navigator
-const index = () => {
+const MainNavigator = () => {
   return (
-    <View>
-      <Text>index</Text>
-    </View>
-  )
-}
+    <NavigationContainer>
+      <MainStack.Navigator initialRouteName="Login">
+        <MainStack.Screen name="Auth" component={AuthNavigator} />
+      </MainStack.Navigator>
+    </NavigationContainer>
+  );
+};
 
-export default index
+export default MainNavigator;
