@@ -7,9 +7,13 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "../MetroBus/assets/Logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#97F6FC",
+      " width": "70%",
+      "maxWidth": 300,
+    "maxHeight": 200
+
     },
     "assetBundlePatterns": [
       "**/*"

@@ -1,5 +1,5 @@
- const Colors = {
-    primary:"#FFA300"
-}
+const Colors = {
+  primary: "#FFA300",
+};
 
-export default Colors
+export default Colors;

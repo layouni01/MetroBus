@@ -8,7 +8,12 @@ const MainStack = createNativeStackNavigator();
 const MainNavigator = () => {
   return (
     <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Login">
+      <MainStack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+        initialRouteName="Login"
+      >
         <MainStack.Screen name="Auth" component={AuthNavigator} />
       </MainStack.Navigator>
     </NavigationContainer>
