@@ -32,7 +32,7 @@ const LoginScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
-        <Image source={logo} style={styles.logo} resizeMode="cover" />
+        <Image source={logo} style={styles.logo} resizeMode="contain" />
         <View style={styles.inputview}>
           <Ionicons name="mail" size={24} color={Colors.primary} />
           <TextInput

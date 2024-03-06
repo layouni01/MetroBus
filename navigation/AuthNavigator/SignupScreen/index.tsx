@@ -7,6 +7,7 @@ import {
   ScrollView,
   Dimensions,
   SafeAreaView,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -38,8 +39,8 @@ const SignupScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 20 }}>
-      <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollViewContainer}>
         <View>
           <Image source={logo} style={styles.logo} resizeMode="contain" />
         </View>

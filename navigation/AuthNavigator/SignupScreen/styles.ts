@@ -1,9 +1,14 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { Colors } from "../../../utils";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding:20
+  },
+  scrollViewContainer: {
+    flex: 1,
+    paddingHorizontal:Platform.OS==="ios"?20:0
   },
   title: {
     fontFamily: "Arial Rounded MT Bold",

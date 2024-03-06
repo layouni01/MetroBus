@@ -3,4 +3,4 @@
     white:"#FFFF"
 }
 
-export default Colors
+export default Colors;
