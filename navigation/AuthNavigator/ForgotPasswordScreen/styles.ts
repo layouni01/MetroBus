@@ -67,12 +67,6 @@ const styles = StyleSheet.create({
     paddingLeft:10,
     
   },
-  icon: {
-    marginHorizontal: 5,
-    position: "absolute",
-    right: 10,
-    alignSelf: "center",
-  },
 });
 
 export default styles;
