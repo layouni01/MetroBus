@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFA300",
     alignItems: "center",
     paddingVertical: 20,
-    borderRadius: 10,
+    borderRadius: 20,
     marginVertical: 20,
   },
   title: {
@@ -44,13 +44,20 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
+  textforget:{
+    fontSize: 15,
+    color: "#FFA300",
+    textDecorationLine: "underline"
+
+  },
   textF: {
     fontSize: 15,
     color: "black",
   },
   textF2: {
     fontSize: 15,
-    color: "blue",
+    color: "#FFA300",
+    textDecorationLine: "underline"
   },
   signupp: {
     display: "flex",

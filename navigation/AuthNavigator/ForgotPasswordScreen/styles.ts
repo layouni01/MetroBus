@@ -26,13 +26,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFA300",
     alignItems: "center",
     paddingVertical: 20,
-    borderRadius: 10,
+    borderRadius: 20,
     marginVertical: 20,
   },
-  title: {
-    fontSize: 50,
-    fontWeight: "bold",
-  },
+
+
   subtitle: {
     fontSize: 15,
     color: "gray",
@@ -44,18 +42,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-  textF: {
-    fontSize: 15,
-    color: "black",
-  },
-  textF2: {
-    fontSize: 15,
-    color: "blue",
-  },
-  signupp: {
-    display: "flex",
-    flexDirection: "row",
-  },
+
   inputview: {
     display: "flex",
     flexDirection: "row",
@@ -67,6 +54,10 @@ const styles = StyleSheet.create({
     paddingLeft:10,
     
   },
+  header:{
+    backgroundColor: Colors.white,
+  },
+
 });
 
 export default styles;

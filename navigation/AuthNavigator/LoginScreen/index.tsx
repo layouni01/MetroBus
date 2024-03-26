@@ -63,10 +63,13 @@ const LoginScreen = () => {
           />
         </View>
         <TouchableOpacity onPress={() => Navigation.navigate("forget")}>
-          <Text style={styles.textF}> Forgot Password?</Text>
+          <Text style={styles.textforget}> Forgot Password?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => Navigation.navigate("home")}
+        >
           <Text style={styles.text}>Sign in </Text>
         </TouchableOpacity>
         <View style={styles.signupp}>

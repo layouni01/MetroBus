@@ -128,12 +128,12 @@ const SignupScreen = () => {
           <Text style={styles.buttonText}>Sign in</Text>
         </TouchableOpacity>
 
-        <View style={styles.loginText}>
-          <Text> Already have an account !</Text>
+        <View style={styles.signupp}>
+          <Text style={styles.textF}> Already have an account !</Text>
           <TouchableOpacity
             onPress={() => Navigation.navigate("Login" as never)}
           >
-            <Text style={{ color: "blue" }}> Log In </Text>
+            <Text style={styles.textF2}> Log In </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

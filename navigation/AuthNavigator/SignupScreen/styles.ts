@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     flex: 1,
-    margin: 5,
-    padding: 10,
+    margin:5,
+    padding: 5,
     flexDirection: "row",
     width: "100%",
   },
@@ -45,16 +45,27 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   loginButton: { padding: 10 },
-  loginText: {
+  signupp: {
+    display: "flex",
     flexDirection: "row",
+  },
+  textF: {
+    fontSize: 15,
+    color: "black",
+  },
+  textF2: {
+    fontSize: 15,
+    color: "#FFA300",
+    textDecorationLine: "underline"
+
   },
   inputView: {
     flexDirection: "row",
     marginVertical: 10,
     width: "100%",
-    height: 65,
+    height: 55,
     alignItems: "center",
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: Colors.primary,
     borderRadius: 10,
     paddingLeft: 10,
