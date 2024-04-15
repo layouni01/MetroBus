@@ -14,6 +14,7 @@
       "maxWidth": 300,
     "maxHeight": 200
     },
+    
     "assetBundlePatterns": [
       "**/*"
     ],

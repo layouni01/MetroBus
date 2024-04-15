@@ -4,30 +4,27 @@ import { Colors } from "../../../utils";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
     paddingTop: 70,
     padding: 20,
   },
   logo: {
     width: "100%",
-    height:250,
+    height: 250,
     alignItems: "center",
-    marginBottom:50,
-
+    marginBottom: 50,
   },
   input: {
     height: 50,
-    flex:1,
-    paddingLeft:15
-   
+    flex: 1,
+    paddingLeft: 15,
   },
   button: {
     width: "100%",
-    backgroundColor: "#FFA300",
+    backgroundColor: Colors.primary,
     alignItems: "center",
     paddingVertical: 20,
-    borderRadius: 20,
-    marginVertical: 20,
+    borderRadius: 10,
+    marginVertical: 60,
   },
   title: {
     fontSize: 50,
@@ -44,11 +41,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-  textforget:{
+  textforget: {
     fontSize: 15,
-    color: "#FFA300",
-    textDecorationLine: "underline"
-
+    color: Colors.darkGray,
+    textDecorationLine: "underline",
   },
   textF: {
     fontSize: 15,
@@ -56,12 +52,13 @@ const styles = StyleSheet.create({
   },
   textF2: {
     fontSize: 15,
-    color: "#FFA300",
-    textDecorationLine: "underline"
+    color: Colors.primary,
+    textDecorationLine: "underline",
   },
   signupp: {
-    display: "flex",
     flexDirection: "row",
+    paddingLeft: 80,
+    paddingTop: 20,
   },
   inputview: {
     display: "flex",
@@ -71,8 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
     alignItems: "center",
-    paddingLeft:10,
-    
+    paddingLeft: 10,
   },
   icon: {
     marginHorizontal: 5,

@@ -34,7 +34,7 @@ const LoginScreen = () => {
       <ScrollView style={styles.container}>
         <Image source={logo} style={styles.logo} resizeMode="contain" />
         <View style={styles.inputview}>
-          <Ionicons name="mail" size={24} color={Colors.primary} />
+          <Ionicons name="mail-outline" size={24} color={Colors.primary} />
           <TextInput
             placeholder="Email"
             style={styles.input}
@@ -62,19 +62,23 @@ const LoginScreen = () => {
             style={styles.icon}
           />
         </View>
-        <TouchableOpacity onPress={() => Navigation.navigate("forget")}>
+        <TouchableOpacity
+          onPress={() => Navigation.navigate("ForgetPassword" as never)}
+        >
           <Text style={styles.textforget}> Forgot Password?</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
+          onPress={() => Navigation.navigate("Home" as never)}
           style={styles.button}
-          onPress={() => Navigation.navigate("home")}
         >
           <Text style={styles.text}>Sign in </Text>
         </TouchableOpacity>
         <View style={styles.signupp}>
           <Text style={styles.textF}> Don’t have an account? </Text>
-          <TouchableOpacity onPress={() => Navigation.navigate("signup")}>
+          <TouchableOpacity
+            onPress={() => Navigation.navigate("SignUp" as never)}
+          >
             <Text style={styles.textF2}> sign up</Text>
           </TouchableOpacity>
         </View>

@@ -4,11 +4,11 @@ import { Colors } from "../../../utils";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding:20
+    padding: 20,
   },
   scrollViewContainer: {
     flex: 1,
-    paddingHorizontal:Platform.OS==="ios"?20:0
+    paddingHorizontal: Platform.OS === "ios" ? 20 : 0,
   },
   title: {
     fontFamily: "Arial Rounded MT Bold",
@@ -19,21 +19,19 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     flex: 1,
-    margin:5,
+    margin: 5,
     padding: 5,
     flexDirection: "row",
     width: "100%",
   },
 
   button: {
-    marginVertical: 30,
-    padding: 10,
-    backgroundColor: Colors.primary,
     width: "100%",
-    height: 50,
-    borderRadius: 15,
+    backgroundColor: Colors.primary,
     alignItems: "center",
-    justifyContent: "center",
+    paddingVertical: 20,
+    borderRadius: 10,
+    marginVertical: 60,
   },
   buttonText: {
     color: "#fff",
@@ -56,8 +54,7 @@ const styles = StyleSheet.create({
   textF2: {
     fontSize: 15,
     color: "#FFA300",
-    textDecorationLine: "underline"
-
+    textDecorationLine: "underline",
   },
   inputView: {
     flexDirection: "row",

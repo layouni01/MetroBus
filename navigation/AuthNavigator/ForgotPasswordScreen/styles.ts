@@ -4,32 +4,27 @@ import { Colors } from "../../../utils";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+
     paddingTop: 70,
     padding: 20,
   },
   logo: {
+    height: 300,
     width: "100%",
-    height:250,
-    alignItems: "center",
-    marginBottom:50,
-
   },
   input: {
     height: 50,
-    flex:1,
-    paddingLeft:15
-   
+    flex: 1,
+    paddingLeft: 15,
   },
   button: {
     width: "100%",
-    backgroundColor: "#FFA300",
+    backgroundColor: Colors.primary,
     alignItems: "center",
     paddingVertical: 20,
-    borderRadius: 20,
-    marginVertical: 20,
+    borderRadius: 10,
+    marginVertical: 60,
   },
-
 
   subtitle: {
     fontSize: 15,
@@ -47,17 +42,15 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     borderColor: Colors.primary,
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: 10,
     marginVertical: 10,
     alignItems: "center",
-    paddingLeft:10,
-    
+    paddingLeft: 10,
   },
-  header:{
+  header: {
     backgroundColor: Colors.white,
   },
-
 });
 
 export default styles;

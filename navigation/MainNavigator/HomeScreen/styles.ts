@@ -1,20 +1,21 @@
 import { StyleSheet } from "react-native";
-import styles from "../navigation/AuthNavigator/ForgotPasswordScreen/styles";
+import { Colors } from "../../../utils";
 
-const ss = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    marginTop: 55,
+    backgroundColor: "#FFF3E0",
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "bold",
     marginBottom: 20,
+    marginTop: 55,
   },
   card: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    backgroundColor: Colors.white,
+    borderRadius: 12,
     padding: 20,
     marginBottom: 20,
 
@@ -22,16 +23,20 @@ const ss = StyleSheet.create({
       width: 0,
       height: 2,
     },
+
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
   },
+
   image: {
     width: 200,
     height: 120,
-    marginBottom: 10,
+    marginBottom: 20,
     resizeMode: "cover",
+    borderRadius: 10,
   },
+
   text: {
     fontSize: 20,
     marginBottom: 10,
@@ -40,16 +45,17 @@ const ss = StyleSheet.create({
 
   button: {
     width: 200,
-    backgroundColor: "#FFA300",
+    backgroundColor: Colors.primary,
     alignItems: "center",
     paddingVertical: 10,
-    borderRadius: 20,
+    borderRadius: 12,
     marginVertical: 10,
   },
+
   textboutton: {
     textAlign: "center",
     color: "white",
     fontWeight: "bold",
   },
 });
-export default ss;
+export default styles;

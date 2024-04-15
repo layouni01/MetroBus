@@ -1,27 +1,28 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import styles from "./styles";
-import BottomAppBar from "../navigation/AuthNavigator/appbar";
+import BottomAppBar from "../../BottomNavBar";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Do you want to take?</Text>
       <Card
         text="BUS"
-        image={require("../assets/bus.png")}
+        image={require("../../../assets/bus.png")}
         onPressButton={() => {
-          console.log("Bouton pressé");
+          navigation.navigate("ChooseStation" as never);
         }}
       />
       <Card
         text="METRO"
-        image={require("../assets/Metro.png")}
+        image={require("../../../assets/Metro.png")}
         onPressButton={() => {
-          console.log("Bouton pressé sur la deuxième carte");
+          console.log(" Bouton pressé sur la deuxième carte");
         }}
       />
-      {/* Ajoutez le BottomAppBar ici */}
       <BottomAppBar />
     </View>
   );

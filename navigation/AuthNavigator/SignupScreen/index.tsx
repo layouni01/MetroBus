@@ -7,7 +7,6 @@ import {
   ScrollView,
   Dimensions,
   SafeAreaView,
-  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -45,11 +44,7 @@ const SignupScreen = () => {
           <Image source={logo} style={styles.logo} resizeMode="contain" />
         </View>
         <View style={styles.inputView}>
-          <Ionicons
-            name="person-circle-outline"
-            size={25}
-            color={Colors.primary}
-          />
+          <Ionicons name="person-outline" size={25} color={Colors.primary} />
           <TextInput
             style={styles.input}
             placeholder="Name"
@@ -123,7 +118,7 @@ const SignupScreen = () => {
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => console.log("Button pressed!")}
+          onPress={() => Navigation.navigate("ChooseStation" as never)}
         >
           <Text style={styles.buttonText}>Sign in</Text>
         </TouchableOpacity>

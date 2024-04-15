@@ -4,7 +4,10 @@ import React from "react";
 import LoginScreen from "./LoginScreen";
 import SignupScreen from "./SignupScreen";
 import ForgotPasswordScreen from "./ForgotPasswordScreen";
-
+import ChooseStation from "../MainNavigator/ChooseStation";
+import Destination from "../MainNavigator/Destination";
+import HomeScreen from "../MainNavigator/HomeScreen";
+import ProfileScreen from "../MainNavigator/ProfileScreen";
 const AuthStack = createNativeStackNavigator();
 const AuthNavigator = () => {
   return (
@@ -22,6 +25,7 @@ const AuthNavigator = () => {
       <AuthStack.Screen
         name="ForgotPassword"
         component={ForgotPasswordScreen}
+        options={{ headerShown: false }}
       />
     </AuthStack.Navigator>
   );

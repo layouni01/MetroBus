@@ -28,15 +28,12 @@ const ForgotPasswordScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.header}>
-        <HeaderBackButton onPress={goBack} />
-      </View>
-
       <ScrollView style={styles.container}>
-        <Image source={logo} style={styles.logo} resizeMode="cover" />
-
+        <View>
+          <Image source={logo} style={styles.logo} resizeMode="contain" />
+        </View>
         <View style={styles.inputview}>
-          <Ionicons name="mail" size={24} color={Colors.primary} />
+          <Ionicons name="mail-outline" size={24} color={Colors.primary} />
           <TextInput
             placeholder="Email"
             style={styles.input}
