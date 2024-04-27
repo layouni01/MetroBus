@@ -4,8 +4,8 @@ import { Colors } from "../../../utils";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 70,
-    padding: 20,
+    //paddingTop: 70,
+    //padding: 20,
   },
   logo: {
     width: "100%",
@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   button: {
-    width: "100%",
+    alignSelf: "center",
+    width: "90%",
     backgroundColor: Colors.primary,
     alignItems: "center",
     paddingVertical: 20,
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.darkGray,
     textDecorationLine: "underline",
+    padding: 20,
   },
   textF: {
     fontSize: 15,
@@ -58,7 +60,8 @@ const styles = StyleSheet.create({
   signupp: {
     flexDirection: "row",
     paddingLeft: 80,
-    paddingTop: 20,
+    display: "flex",
+    marginBottom: 20,
   },
   inputview: {
     display: "flex",
@@ -69,6 +72,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: "center",
     paddingLeft: 10,
+    width: "90%",
+    alignSelf: "center",
   },
   icon: {
     marginHorizontal: 5,

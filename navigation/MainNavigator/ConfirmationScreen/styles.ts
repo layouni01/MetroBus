@@ -12,8 +12,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   checkmark: {
+    alignSelf: "center",
     width: 150,
     height: 150,
+    marginTop: 150,
   },
   confirmationMessage: {
     marginTop: 24,
@@ -26,7 +28,7 @@ const styles = StyleSheet.create({
   },
   continueButton: {
     backgroundColor: Colors.primary,
-    borderRadius: 20,
+    borderRadius: 10,
     height: 50,
     width: "80%",
     marginVertical: 100,

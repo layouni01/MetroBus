@@ -1,5 +1,11 @@
 import React from "react";
-import { FlatList, Text, View } from "react-native";
+import {
+  FlatList,
+  ScrollView,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import { HeaderBackButton } from "@react-navigation/elements";
 import { useNavigation } from "@react-navigation/native";
 import BottomAppBar from "../../BottomNavBar";
@@ -27,17 +33,17 @@ const HistoryScreen = () => {
       Price: 120.75,
       Destination: "Tokyo",
     },
-    // Add more fake ticket objects as needed
+    // Add more fake ticket
   ];
   const renderItem = ({ item }) => (
-    <View style={styles.ticketItem}>
+    <TouchableOpacity style={styles.ticketItem}>
       <Text style={styles.ticketTitle}>
         Reservation ID: {item.Id_réservation}
       </Text>
       <Text>Date: {item.Date_rev.toDateString()}</Text>
       <Text>Price: ${item.Price.toFixed(2)}</Text>
       <Text>Destination: {item.Destination}</Text>
-    </View>
+    </TouchableOpacity>
   );
   return (
     <SafeAreaView style={styles.container}>

@@ -13,21 +13,21 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "android" ? 30 : 20,
   },
   headerTitle: {
+    marginLeft: 10,
+    marginTop: 20,
     fontSize: 30,
     fontWeight: "bold",
-    //color: " black",
-    marginBottom: 12,
   },
   subTitle: {
     fontSize: 18,
-    //color: "black",
+    padding: 10,
   },
   ticketContainer: {
-    marginBottom: 10,
+    margin: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 20,
+    padding: 15,
     borderRadius: 20,
     elevation: 3, // for Android shadow
     shadowColor: "#000", // for iOS shadow
@@ -66,16 +66,19 @@ const styles = StyleSheet.create({
   viewMoreButton: {
     padding: 10,
     alignItems: "center",
+    zIndex: 1,
+    marginBottom: 100,
   },
   reserveButton: {
     alignSelf: "center",
-    height: 40,
+    height: 50,
     justifyContent: "center",
-    width: "80%",
+    width: "90%",
     alignItems: "center",
     backgroundColor: Colors.primary,
     borderRadius: 10,
-    marginVertical: 90,
+    zIndex: 1,
+    marginBottom: 100,
   },
   reserveButtonText: {
     color: "white",

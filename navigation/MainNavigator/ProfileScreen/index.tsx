@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import BottomAppBar from "../../BottomNavBar";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const ProfileScreen = () => {
-  // Define your sign out function or any other actions here
+  const [profilePic, setProfilePic] = useState(
+    "https://via.placeholder.com/150"
+  );
+  useEffect(() => {
+    const loadProfilePic = async () => {
+      const savedProfilePic = await AsyncStorage.getItem("profilePic");
+      if (savedProfilePic) {
+        setProfilePic(savedProfilePic);
+      }
+    };
+    loadProfilePic();
+  }, []);
   const handleSignOut = () => {
     console.log("Sign out");
   };
@@ -24,7 +35,7 @@ const ProfileScreen = () => {
       <ScrollView>
         <View style={styles.profileSection}>
           <Image
-            source={{ uri: "https://via.placeholder.com/150" }} // Replace with actual image path
+            source={{ uri: profilePic }} // Replace with actual image path
             style={styles.profileImage}
           />
           <View style={{ flex: 1 }}>
@@ -39,7 +50,11 @@ const ProfileScreen = () => {
         </View>
 
         <View style={styles.menuSection}>
-          <MenuItem icon="notifications" text="Notifications" />
+          <MenuItem
+            icon="notifications"
+            text="Notifications"
+            onPress={() => navigation.navigate("Notifications" as never)}
+          />
 
           <MenuItem
             icon="star"

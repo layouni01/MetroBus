@@ -6,35 +6,45 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
+  Alert,
+  ScrollView,
 } from "react-native";
 import BottomAppBar from "../../BottomNavBar";
 import styles from "./styles";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 const ConfirmationScreen = () => {
+  const route = useRoute();
+  const ticket = useRoute().params;
   const navigation = useNavigation();
-  const goToTrackScreen = () => {
-    navigation.navigate("TrackScreen", { qrCode: true }); // Pass parameters as needed
+  const goToQRCodeScreen = () => {
+    if (ticket) {
+      navigation.navigate("QRcode", { ticketData: ticket });
+    } else {
+      Alert.alert("Error", "Ticket data is missing.");
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Image
-          source={require("./../../../assets/checkmark.png")}
-          style={styles.checkmark}
-        />
-        <Text style={styles.confirmationMessage}>
-          Your reservation is confirmed
-        </Text>
-        <Text style={styles.thankYouText}>Thank you for using our app.</Text>
-      </View>
-      <View>
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={goToTrackScreen}
-        >
-          <Text style={styles.continueButtonText}>Continue</Text>
-        </TouchableOpacity>
-      </View>
+      <ScrollView>
+        <View style={styles.content}>
+          <Image
+            source={require("./../../../assets/checkmark.png")}
+            style={styles.checkmark}
+          />
+          <Text style={styles.confirmationMessage}>
+            Your reservation is confirmed
+          </Text>
+          <Text style={styles.thankYouText}>Thank you for using our app.</Text>
+        </View>
+        <View>
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={goToQRCodeScreen}
+          >
+            <Text style={styles.continueButtonText}>Get QR code</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
       <BottomAppBar />
     </SafeAreaView>
   );

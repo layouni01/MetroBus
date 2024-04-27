@@ -1,121 +1,158 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   SafeAreaView,
-  Modal,
+  ScrollView,
   FlatList,
   Alert,
+  Image,
 } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
+
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
-import * as Location from "expo-location";
 import BottomAppBar from "../../BottomNavBar";
+import { Dropdown } from "react-native-element-dropdown";
+
+const data = [
+  {
+    label: "sousse",
+    value: "sousse",
+    coordinates: { latitude: 35.825603, longitude: 10.608395 },
+  },
+  {
+    label: "monastir",
+    value: "monastir",
+    coordinates: { latitude: 35.764252, longitude: 10.811289 },
+  },
+  {
+    label: "moknine",
+    value: "moknine",
+    coordinates: { lat: 35.7302, lng: 10.9119 },
+  },
+  {
+    label: "ksar helal",
+    value: "ksar helal",
+    coordinates: { lat: 35.6488, lng: 10.8882 },
+  },
+];
 
 const ChooseStation = () => {
-  const [station, setStation] = useState("");
-  const [stationsList, setStationsList] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
+  const [fromLocation, setFromLocation] = useState("");
+  const [toLocation, setToLocation] = useState("");
+  const [selectedMode, setSelectedMode] = useState(null);
+  const [fromOptions, setFromOptions] = useState(data);
+  const [toOptions, setToOptions] = useState(data);
 
-  const fetchNearbyStations = useCallback(async (location) => {
-    // Ideally, you would replace this with an actual API call
-    // to fetch the stations based on the user's current location.
-    // For now, this is just a simulated response.
-    return [
-      { id: "1", name: "Station 1", distance: "0.5 km" },
-      { id: "2", name: "Station 2", distance: "1.0 km" },
-    ];
-  }, []);
+  useEffect(() => {
+    setFromOptions(data.filter((item) => item.value !== toLocation));
+    setToOptions(data.filter((item) => item.value !== fromLocation));
+  }, [fromLocation, toLocation]);
 
-  const findStationsNearby = async () => {
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert(
-          "Permission Denied",
-          "Permission to access location was denied"
-        );
-        return;
-      }
-
-      const { coords } = await Location.getCurrentPositionAsync({});
-      const nearbyStations = await fetchNearbyStations(coords);
-      setStationsList(nearbyStations);
-      setModalVisible(true);
-    } catch (error) {
-      Alert.alert("Location Error", "Unable to retrieve the current location.");
+  const handleNavigateToTravelTimes = () => {
+    // Check if both inputs are filled
+    if (
+      fromLocation &&
+      fromLocation !== "null" &&
+      toLocation &&
+      toLocation !== "null" &&
+      selectedMode
+    ) {
+      // Navigate to TravelTimes with parameters
+      navigation.navigate("TravelTimes", {
+        from: fromLocation,
+        to: toLocation,
+        mode: selectedMode,
+      });
+    } else {
+      // Show an alert if either input is empty
+      Alert.alert(
+        "Missing Information",
+        "Please select 'From' and 'To' locations and a mode of transport to continue."
+      );
     }
   };
 
-  const handleStationSelect = (selectedStation) => {
-    setStation(selectedStation.name);
-    setModalVisible(false);
+  const handleSelectMode = (mode) => {
+    setSelectedMode(selectedMode === mode ? null : mode);
   };
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.listItem}
-      onPress={() => handleStationSelect(item)}
-    >
-      <Text style={styles.listItemText}>
-        {item.name} - {item.distance}
-      </Text>
-    </TouchableOpacity>
-  );
-
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>
-          Which train station do you usually start your day?
-        </Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            onChangeText={setStation}
-            value={station}
-            placeholder="Train station"
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.content}>
+          <Text style={styles.title}>Tipe your destination for today ?</Text>
+
+          <Dropdown
+            style={styles.dropDown}
+            data={data} // list of stations
+            labelField="label"
+            valueField="value"
+            placeholder="From station"
+            placeholderStyle={{
+              color: "lightgrey",
+            }}
+            value={fromLocation}
+            onChange={(item) => setFromLocation(item.value)}
           />
+
+          <Dropdown
+            style={styles.dropDown}
+            data={toOptions} // list of stations
+            labelField="label"
+            valueField="value"
+            placeholder="To station"
+            placeholderStyle={{
+              color: "lightgrey",
+            }}
+            value={toLocation}
+            onChange={(item) => {
+              setToLocation(item.value);
+            }}
+          />
+        </View>
+
+        <View style={styles.Checkcontainer}>
           <TouchableOpacity
-            style={styles.locationButton}
-            onPress={findStationsNearby}
+            style={[
+              styles.imageContainer,
+              selectedMode === "train" && styles.selectedContainer,
+            ]}
+            onPress={() => handleSelectMode("train")}
           >
-            <Icon name="my-location" size={24} color="#ffa300" />
-            <Text> Your location</Text>
+            <Image
+              source={require("../../../assets/Metro.png")}
+              style={styles.image}
+            />
+            <Text>Train</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.imageContainer,
+              selectedMode === "bus" && styles.selectedContainer,
+            ]}
+            onPress={() => handleSelectMode("bus")}
+          >
+            <Image
+              source={require("../../../assets/bus.png")}
+              style={styles.image}
+            />
+            <Text>Bus</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Destination", { stationName: station })
-          }
+          onPress={handleNavigateToTravelTimes}
           style={styles.button}
         >
           <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
-      </View>
-      <Modal visible={modalVisible} animationType="slide" transparent>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <FlatList
-              data={stationsList}
-              keyExtractor={(item) => item.id}
-              renderItem={renderItem}
-            />
-            <TouchableOpacity
-              style={styles.closeModalButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      </ScrollView>
+
       <BottomAppBar />
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -6,9 +6,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   ticketInfo: {
+    backgroundColor: Colors.white,
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.primary,
+    borderWidth: 2,
+    borderColor: Colors.primary,
+    borderRadius: 10,
+    margin: 10,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
   title: {
     fontSize: 24,
@@ -24,18 +30,25 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     zIndex: 1,
-    padding: 20,
+
     alignItems: "center",
     backgroundColor: Colors.primary,
-    marginBottom: 100,
-    borderRadius: 20,
-    width: "80%",
+    bottom: 130,
+    borderRadius: 10,
+    width: "90%",
+    height: 50,
+    justifyContent: "center",
     alignSelf: "center",
   },
   confirmButtonText: {
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  qrCodeContainer: {
+    position: "absolute",
+    paddingLeft: "82%",
+    paddingTop: "10%",
   },
 });
 export default styles;

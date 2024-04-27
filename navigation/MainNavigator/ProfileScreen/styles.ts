@@ -46,9 +46,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 16,
-    width: "100%",
+    marginTop: 80,
+    width: "90%",
     height: 50,
+    alignSelf: "center",
   },
   signOutText: {
     color: "white",

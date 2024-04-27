@@ -4,16 +4,18 @@ import MapView, { Marker } from "react-native-maps";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import BottomAppBar from "../../BottomNavBar";
 import styles from "../TrackScreen/styles";
-const TrackBus = () => {
+const TrackScreen = () => {
   const route = useRoute();
-  const ticket = route.params;
+  //const ticket = route.params;
+  const { ticket, fromCoords, toCoords } = route.params;
+  // const { fromCoords, toCoords } = route.params;
   const navigation = useNavigation();
   // Dummy coordinates for the map, replace with actual data
   const region = {
-    latitude: 35.764252,
-    longitude: 10.811289,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+    latitude: (fromCoords.latitude + toCoords.latitude) / 2,
+    longitude: (fromCoords.longitude + toCoords.longitude) / 2,
+    latitudeDelta: Math.abs(fromCoords.latitude - toCoords.latitude) * 2,
+    longitudeDelta: Math.abs(fromCoords.longitude - toCoords.longitude) * 2,
   };
 
   return (
@@ -28,12 +30,13 @@ const TrackBus = () => {
         </Text>
         <Text style={styles.info}>Price: {ticket.price || "Not provided"}</Text>
       </View>
-      <MapView style={styles.map} initialRegion={region}>
-        {/* Add Marker components for bus stops or route here */}
+      <MapView style={styles.map} provider="google" initialRegion={region}>
+        <Marker coordinate={fromCoords} title="From Station" />
+        <Marker coordinate={toCoords} title="To Station" />
       </MapView>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Confirmation" as never);
+          navigation.navigate("Confirmation", ticket);
         }}
         style={styles.confirmButton}
       >
@@ -44,4 +47,4 @@ const TrackBus = () => {
   );
 };
 
-export default TrackBus;
+export default TrackScreen;

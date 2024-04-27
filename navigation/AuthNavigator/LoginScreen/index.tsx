@@ -3,6 +3,7 @@ import {
   Text,
   TextInput,
   Image,
+  Alert,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
@@ -18,15 +19,19 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const logo = require("../../../assets/logo.png");
+  const handleSignIn = () => {
+    if (email.trim() && password.trim()) {
+      Navigation.navigate("ChooseStation" as never);
+    } else {
+      // Show alert if validation fails
+      Alert.alert("Error", "Please fill in all fields before continuing.");
+    }
+  };
   // State variable to track password visibility
   const [showPassword, setShowPassword] = useState(false);
-  const [showconfirmPassword, setShowconfirmPassword] = useState(false);
-  // Function to toggle the password visibility state
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
-  };
-  const toggleShowconfirmPassword = () => {
-    setShowconfirmPassword(!showconfirmPassword);
   };
 
   return (
@@ -68,10 +73,7 @@ const LoginScreen = () => {
           <Text style={styles.textforget}> Forgot Password?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => Navigation.navigate("Home" as never)}
-          style={styles.button}
-        >
+        <TouchableOpacity onPress={handleSignIn} style={styles.button}>
           <Text style={styles.text}>Sign in </Text>
         </TouchableOpacity>
         <View style={styles.signupp}>
