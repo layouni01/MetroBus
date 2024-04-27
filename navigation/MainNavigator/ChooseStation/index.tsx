@@ -37,6 +37,11 @@ const data = [
     value: "ksar helal",
     coordinates: { lat: 35.6488, lng: 10.8882 },
   },
+  {
+    label: "Bekalta",
+    value: "Bekalta",
+    coordinates: { lat: 35.6488, lng: 10.8882 },
+  },
 ];
 
 const ChooseStation = () => {
