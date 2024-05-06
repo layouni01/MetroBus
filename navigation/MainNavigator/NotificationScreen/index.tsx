@@ -3,43 +3,40 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
+  Alert,
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
 import styles from "../NotificationScreen/styles";
 import { useNavigation } from "@react-navigation/native";
 import BottomAppBar from "../../BottomNavBar";
+import axios from "axios";
 const NotificationsScreen = () => {
   const [notifications, setNotifications] = useState([]);
   const navigation = useNavigation();
   useEffect(() => {
-    // Here you would fetch notifications from your backend or local storage
     loadNotifications();
   }, []);
 
   const loadNotifications = async () => {
-    // Simulating fetching data
-    const fetchedNotifications = [
-      {
-        id: "1",
-        title: "Bus n°6 en Retard de 20min ",
-        date: "2024-04-15",
-        content:
-          "Le Bus n°6 qui lie entre Sousse et Moknine est en panne un retard de 20min est estimé",
-        expanded: false,
-      },
-      {
-        id: "2",
-        title: "Train n°32 en Retard de 30min",
-        date: "2024-04-14",
-        content:
-          "Le Train n°32 qui lie entre Ksar Helal et Sayada  est en panne un retard de 30min est estimé",
-        expanded: false,
-      },
-      // Add more notifications
-    ];
-    setNotifications(fetchedNotifications);
+    try {
+      const response = await axios.get(
+        "http://192.168.1.53:5000/notification/getAllnotification"
+      );
+      if (response.data) {
+        const fetchedNotifications = response.data.map((notification) => ({
+          id: notification._id,
+          title: notification.title,
+          date: new Date(notification.date).toLocaleDateString(), // Format the date
+          content: notification.message,
+          expanded: false,
+        }));
+        setNotifications(fetchedNotifications);
+      }
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error);
+      Alert.alert("Error", "Failed to load notifications.");
+    }
   };
   const toggleDetails = (id) => {
     const updatedNotifications = notifications.map((notification) => {

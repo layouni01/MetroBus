@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
-  FlatList,
   Alert,
   Image,
 } from "react-native";
@@ -15,47 +14,43 @@ import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import BottomAppBar from "../../BottomNavBar";
 import { Dropdown } from "react-native-element-dropdown";
-
-const data = [
-  {
-    label: "sousse",
-    value: "sousse",
-    coordinates: { latitude: 35.825603, longitude: 10.608395 },
-  },
-  {
-    label: "monastir",
-    value: "monastir",
-    coordinates: { latitude: 35.764252, longitude: 10.811289 },
-  },
-  {
-    label: "moknine",
-    value: "moknine",
-    coordinates: { lat: 35.7302, lng: 10.9119 },
-  },
-  {
-    label: "ksar helal",
-    value: "ksar helal",
-    coordinates: { lat: 35.6488, lng: 10.8882 },
-  },
-  {
-    label: "Bekalta",
-    value: "Bekalta",
-    coordinates: { lat: 35.6488, lng: 10.8882 },
-  },
-];
+import axios from "axios";
 
 const ChooseStation = () => {
   const navigation = useNavigation();
+  const [stations, setStations] = useState([]);
   const [fromLocation, setFromLocation] = useState("");
   const [toLocation, setToLocation] = useState("");
   const [selectedMode, setSelectedMode] = useState(null);
-  const [fromOptions, setFromOptions] = useState(data);
-  const [toOptions, setToOptions] = useState(data);
+  const [fromOptions, setFromOptions] = useState(stations);
+  const [toOptions, setToOptions] = useState(stations);
+  useEffect(() => {
+    const fetchStations = async () => {
+      try {
+        const response = await axios.get(
+          "http://192.168.1.53:5000/station/getAllStations"
+        );
+
+        setStations(
+          response.data.map((station) => ({
+            label: station.nom_station,
+            value: station.nom_station,
+            coordinates: station.coordinates, // ensure your station model includes coordinates if needed
+          }))
+        );
+      } catch (error) {
+        Alert.alert("Error", "Failed to fetch stations");
+        console.error("Failed to fetch stations:", error);
+      }
+    };
+
+    fetchStations();
+  }, []);
 
   useEffect(() => {
-    setFromOptions(data.filter((item) => item.value !== toLocation));
-    setToOptions(data.filter((item) => item.value !== fromLocation));
-  }, [fromLocation, toLocation]);
+    setFromOptions(stations.filter((station) => station.value !== toLocation));
+    setToOptions(stations.filter((station) => station.value !== fromLocation));
+  }, [stations, fromLocation, toLocation]);
 
   const handleNavigateToTravelTimes = () => {
     // Check if both inputs are filled
@@ -93,7 +88,7 @@ const ChooseStation = () => {
 
           <Dropdown
             style={styles.dropDown}
-            data={data} // list of stations
+            data={fromOptions} // list of stations
             labelField="label"
             valueField="value"
             placeholder="From station"

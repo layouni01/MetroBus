@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  Alert,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import BottomAppBar from "../../BottomNavBar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 const ProfileScreen = () => {
   const [profilePic, setProfilePic] = useState(
     "https://via.placeholder.com/150"
@@ -19,8 +27,10 @@ const ProfileScreen = () => {
     };
     loadProfilePic();
   }, []);
-  const handleSignOut = () => {
-    console.log("Sign out");
+
+  const handleSignOut = async () => {
+    AsyncStorage.removeItem("token");
+    navigation.navigate("Login" as never);
   };
   const navigation = useNavigation();
   const MenuItem = ({ icon, text, onPress }) => (

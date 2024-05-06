@@ -13,18 +13,41 @@ import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Colors } from "../../../utils";
-
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const LoginScreen = () => {
   const Navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const logo = require("../../../assets/logo.png");
-  const handleSignIn = () => {
-    if (email.trim() && password.trim()) {
-      Navigation.navigate("ChooseStation" as never);
-    } else {
-      // Show alert if validation fails
+
+  const handleSignIn = async () => {
+    if (!email.trim() || !password.trim()) {
       Alert.alert("Error", "Please fill in all fields before continuing.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://192.168.0.227:5000/user/login",
+        {
+          email: email.trim(),
+          password: password,
+        }
+      );
+
+      if (response.data && response.data.accesstoken) {
+        await AsyncStorage.setItem("userToken", response.data.accesstoken);
+
+        Navigation.navigate("ChooseStation"); // Assuming 'ChooseStation' is the next screen after login
+      } else {
+        throw new Error("No token received");
+      }
+    } catch (error) {
+      const errorMessage = error.response
+        ? error.response.data.msg
+        : "Login failed. Please try again.";
+      Alert.alert("Login Error", errorMessage);
     }
   };
   // State variable to track password visibility

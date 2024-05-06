@@ -14,6 +14,8 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import BottomAppBar from "../../BottomNavBar";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 const RateAndShareScreen = () => {
   const navigation = useNavigation();
   const [rating, setRating] = useState(0);
@@ -43,9 +45,33 @@ const RateAndShareScreen = () => {
   const handleQuickResponse = (response) => {
     setAvis(response);
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (rating > 0 && avis.trim()) {
-      Alert.alert("Feedback Submitted", "Thank you for your feedback!");
+      try {
+        const token = await AsyncStorage.getItem("userToken");
+        const response = await axios.post(
+          "http://192.168.0.227:5000/ratingavis/createratingavis",
+          {
+            number: rating,
+            description: avis,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        Alert.alert("Feedback Submitted", "Thank you for your feedback!");
+        console.log(response.data);
+        setRating(0);
+        setAvis("");
+      } catch (error) {
+        console.error("Error submitting feedback:", error);
+        Alert.alert(
+          "Submission Failed",
+          "Unable to submit feedback. Please try again later."
+        );
+      }
     } else {
       Alert.alert(
         "Missing Information",
@@ -53,6 +79,7 @@ const RateAndShareScreen = () => {
       );
     }
   };
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.container}>

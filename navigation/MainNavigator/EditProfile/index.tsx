@@ -12,12 +12,14 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from "react-native";
+
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Colors from "../../../utils/colors";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import { FontAwesome } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
 const EditProfile = () => {
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
@@ -25,6 +27,40 @@ const EditProfile = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [profilePic, setProfilePic] = useState(null);
+  const [user, setUser] = useState({
+    name: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+  const handleTextChange = (name, value) => {
+    setUser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.43.206:5000/user/getAllUsers/${user}`
+      );
+      if (response.data) {
+        setUser({
+          name: response.data.name,
+          lastName: response.data.lastName,
+          email: response.data.email,
+          password: "",
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+      Alert.alert("Error", "Unable to load user data.");
+    }
+  };
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   useEffect(() => {
     loadProfilePic();
   }, []);
@@ -39,21 +75,6 @@ const EditProfile = () => {
     }
   };
   const navigation = useNavigation();
-
-  const handleSaveProfile = () => {
-    if (!name.trim() || !lastname.trim() || !email.trim() || !password.trim()) {
-      Alert.alert(
-        "Incomplete Fields",
-        "Please fill in all fields before submitting."
-      );
-      return;
-    }
-    console.log("Profile updated:", { name, lastname, email, password });
-    Alert.alert(
-      "Profile Updated",
-      "Your profile has been successfully updated."
-    );
-  };
 
   const handleChooseProfilePic = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -80,6 +101,16 @@ const EditProfile = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleSaveProfile = async (text) => {
+    text.preventDefault();
+    console.log(user);
+
+    if (!user.email || !user.name || !user.lastName) {
+      Alert.alert("Tous les champs doivent être remplis.");
+      return;
+    }
+  };
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <SafeAreaView style={{ flex: 1 }}>
@@ -103,7 +134,8 @@ const EditProfile = () => {
                 style={styles.input}
                 placeholder="Name"
                 placeholderTextColor="#4458"
-                onChangeText={(text) => setName(text)}
+                onChangeText={(text) => handleTextChange("name", text)}
+                value={user.name || ""}
               />
             </View>
             <View style={styles.inputView}>
@@ -116,7 +148,7 @@ const EditProfile = () => {
                 style={styles.input}
                 placeholder="Last Name"
                 placeholderTextColor="#4458"
-                onChangeText={(text) => setLastname(text)}
+                value={user.lastName || ""}
               />
             </View>
             <View style={styles.inputView}>
@@ -125,7 +157,7 @@ const EditProfile = () => {
                 style={styles.input}
                 placeholder="Email"
                 placeholderTextColor="#4458"
-                onChangeText={(text) => setEmail(text)}
+                value={user.email || ""}
               />
             </View>
             <View style={styles.inputView}>
@@ -137,31 +169,7 @@ const EditProfile = () => {
               <TextInput
                 style={styles.input}
                 secureTextEntry={!showPassword}
-                value={password}
-                onChangeText={setPassword}
                 placeholder="Password"
-                placeholderTextColor="#4458"
-              />
-              <Ionicons
-                name={showPassword ? "eye-outline" : "eye-off-outline"}
-                size={24}
-                color={Colors.primary}
-                onPress={toggleShowPassword}
-                style={styles.icon}
-              />
-            </View>
-            <View style={styles.inputView}>
-              <Ionicons
-                name="lock-closed-outline"
-                size={25}
-                color={Colors.primary}
-              />
-              <TextInput
-                style={styles.input}
-                secureTextEntry={!showPassword}
-                value={password}
-                onChangeText={setPassword}
-                placeholder="Confirm Password"
                 placeholderTextColor="#4458"
               />
               <Ionicons

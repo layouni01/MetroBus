@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  Dimensions,
+  Alert,
   SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
@@ -13,9 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Colors } from "../../../utils";
-
-const height = Dimensions.get("screen").height;
-const width = Dimensions.get("screen").width;
+import axios from "axios";
 const logo = require("../../../assets/logo.png");
 
 const SignupScreen = () => {
@@ -25,7 +23,7 @@ const SignupScreen = () => {
   const [email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [confirmpassword, setconfirmPassword] = useState("");
-
+  const [error, setError] = useState();
   // State variable to track password visibility
   const [showPassword, setShowPassword] = useState(false);
   const [showconfirmPassword, setShowconfirmPassword] = useState(false);
@@ -35,6 +33,54 @@ const SignupScreen = () => {
   };
   const toggleShowconfirmPassword = () => {
     setShowconfirmPassword(!showconfirmPassword);
+  };
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleSignup = async () => {
+    if (!name || !lastname || !email || !Password || !confirmpassword) {
+      Alert.alert("Error", "Please fill all the fields.");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      Alert.alert("Error", "Please enter a valid email address.");
+      return;
+    }
+    if (Password !== confirmpassword) {
+      Alert.alert("Error", "Passwords do not match.");
+      return;
+    }
+
+    const userData = {
+      name: name.trim(),
+      lastName: lastname.trim(),
+      email: email.trim(),
+      password: Password,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://192.168.0.227:5000/user/register",
+        userData
+      );
+      if (response.data) {
+        // Success alert
+        Alert.alert(
+          "Registration Successful",
+          "You have been successfully registered!",
+          [{ text: "OK", onPress: () => Navigation.navigate("Login") }]
+        );
+      }
+    } catch (error) {
+      // Handling errors if the request failed
+      const errorMessage = error.response
+        ? error.response.data.msg
+        : error.message;
+      // Error alert
+      Alert.alert("Registration Failed", errorMessage);
+    }
   };
 
   return (
@@ -116,17 +162,14 @@ const SignupScreen = () => {
             style={styles.icon}
           />
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => Navigation.navigate("ChooseStation" as never)}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleSignup}>
           <Text style={styles.buttonText}>Sign in</Text>
         </TouchableOpacity>
 
         <View style={styles.signupp}>
           <Text style={styles.textF}> Already have an account !</Text>
           <TouchableOpacity
-            onPress={() => Navigation.navigate("Login" as never)}
+            onPress={() => Navigation.navigate("Login") as never}
           >
             <Text style={styles.textF2}> Log In </Text>
           </TouchableOpacity>
