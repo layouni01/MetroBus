@@ -28,7 +28,7 @@ const ChooseStation = () => {
     const fetchStations = async () => {
       try {
         const response = await axios.get(
-          "http://192.168.0.227:5000/station/getAllStations"
+          "http://192.168.1.53:5000/station/getAllStations"
         );
 
         setStations(
@@ -119,15 +119,15 @@ const ChooseStation = () => {
           <TouchableOpacity
             style={[
               styles.imageContainer,
-              selectedMode === "train" && styles.selectedContainer,
+              selectedMode === "metro" && styles.selectedContainer,
             ]}
-            onPress={() => handleSelectMode("train")}
+            onPress={() => handleSelectMode("metro")}
           >
             <Image
               source={require("../../../assets/Metro.png")}
               style={styles.image}
             />
-            <Text>Train</Text>
+            <Text>Metro</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[

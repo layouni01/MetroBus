@@ -23,7 +23,7 @@ const NotificationsScreen = () => {
   const loadNotifications = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.0.227:5000/notification/getAllnotification"
+        "http://192.168.1.53:5000/notification/getAllnotification"
       );
       if (response.data && response.data.length > 0) {
         const fetchedNotifications = response.data.map((notification) => ({

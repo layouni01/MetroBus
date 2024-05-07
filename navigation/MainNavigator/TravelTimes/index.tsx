@@ -1,146 +1,83 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
   Text,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
+  Alert,
 } from "react-native";
-
+import axios from "axios";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import styles from "./styles";
 import BottomAppBar from "../../BottomNavBar";
 import { Colors } from "../../../utils";
 // Mock data for the list of tickets
-const tickets = [
-  {
-    id: "1",
-    departureTime: "7:15 PM",
-    arrivalTime: "8:45 PM",
-    departure: "Sousse",
-    arrival: "Moknine",
-    duration: "1 hr 4 min",
-    coordinates: {
-      departure: { latitude: 35.828828, longitude: 10.640525 },
-      arrival: { latitude: 35.6324, longitude: 10.896 },
-    },
-  },
-  {
-    id: "2",
-    departureTime: "9:15 PM",
-    arrivalTime: "10:25 PM",
-    departure: "Sousse",
-    arrival: "Moknine",
-    duration: "1 hr 10 min",
-    coordinates: {
-      departure: { latitude: 35.828828, longitude: 10.640525 },
-      arrival: { latitude: 35.6324, longitude: 10.896 },
-    },
-  },
-  {
-    id: "3",
-    departureTime: "10:45 PM",
-    arrivalTime: "12:00 PM",
-    departure: "Sousse",
-    arrival: "Moknine",
-    duration: "1 hr 15 min",
-    coordinates: {
-      departure: { latitude: 35.828828, longitude: 10.640525 },
-      arrival: { latitude: 35.6324, longitude: 10.896 },
-    },
-  },
-  {
-    id: "9",
-    departureTime: "12:15 PM",
-    arrivalTime: "13:45 PM",
-    departure: "Sousse",
-    arrival: "Moknine",
-    duration: "1 hr 30 min",
-    coordinates: {
-      departure: { latitude: 35.828828, longitude: 10.640525 },
-      arrival: { latitude: 35.6324, longitude: 10.896 },
-    },
-  },
-  {
-    id: "4",
-    departureTime: "7:15 PM",
-    arrivalTime: "8:45 PM",
-    departure: "Sousse",
-    arrival: "Moknine",
-    duration: "1 hr 30 min",
-    coordinates: {
-      departure: { latitude: 35.828828, longitude: 10.640525 },
-      arrival: { latitude: 35.6324, longitude: 10.896 },
-    },
-  },
-  {
-    id: "5",
-    departureTime: "7:15 PM",
-    arrivalTime: "8:45 PM",
-    departure: "Mahdia",
-    arrival: "Moknine",
-    duration: "1 hr 20 min",
-    coordinates: {
-      departure: { latitude: 35.828828, longitude: 10.640525 },
-      arrival: { latitude: 35.6324, longitude: 10.896 },
-    },
-  },
-  {
-    id: "6",
-    departureTime: "15:15 PM",
-    arrivalTime: "15:45 PM",
-    departure: "Bekalta",
-    arrival: "Moknine",
-    duration: "30 min",
-    coordinates: {
-      departure: { latitude: 35.828828, longitude: 10.640525 },
-      arrival: { latitude: 35.6324, longitude: 10.896 },
-    },
-  },
-  {
-    id: "7",
-    departureTime: "12:15 PM",
-    arrivalTime: "13:45 PM",
-    departure: "Sousse",
-    arrival: "Moknine",
-    duration: "1 hr 30 min",
-    coordinates: {
-      departure: { latitude: 35.828828, longitude: 10.640525 },
-      arrival: { latitude: 35.6324, longitude: 10.896 },
-    },
-  },
-  {
-    id: "8",
-    departureTime: "10:15 PM",
-    arrivalTime: "11:45 PM",
-    departure: "Sousse",
-    arrival: "Moknine",
-    duration: "1 hr 30 min",
-    coordinates: {
-      departure: { latitude: 35.828828, longitude: 10.640525 },
-      arrival: { latitude: 35.6324, longitude: 10.896 },
-    },
-  },
-  // Add more ticket objects as needed
-];
+const calculateDuration = (startTime, endTime) => {
+  // Extract hours and minutes from startTime and endTime
+  const [startHour, startMinute] = startTime.split(":").map(Number);
+  const [endHour, endMinute] = endTime.split(":").map(Number);
+
+  // Convert both times to minutes since midnight
+  const startTotalMinutes = startHour * 60 + startMinute;
+  const endTotalMinutes = endHour * 60 + endMinute;
+
+  // Calculate the duration in minutes
+  let durationMinutes = endTotalMinutes - startTotalMinutes;
+  if (durationMinutes < 0) {
+    // This condition accounts for overnight scenarios where the end time is on the next day
+    durationMinutes += 24 * 60;
+  }
+
+  // Convert minutes into hours and minutes
+  const hours = Math.floor(durationMinutes / 60);
+  const minutes = durationMinutes % 60;
+
+  // Return the duration in a formatted string
+  return `${hours}h ${minutes}m`;
+};
 
 const TravelTimes = () => {
   const route = useRoute();
   const { from, to, mode } = route.params || {};
   const [selectedId, setSelectedId] = useState(null);
   const [displayedTicketsCount, setDisplayedTicketsCount] = useState(3);
+  const [trajets, setTrajets] = useState([]);
   const navigation = useNavigation();
   // Determine the icon based on the mode
   const getIconName = () => {
     return mode === "train" ? "train-outline" : "bus-outline";
   };
+  useEffect(() => {
+    const fetchTrajets = async () => {
+      try {
+        const response = await axios.get(
+          `http://192.168.1.53:5000/trajet/getAllTrajet`,
+          {
+            params: { depart: from, arrivee: to, Type: mode },
+          }
+        );
+        // Sort the trajets by departure time
+        const sortedTrajets = response.data.sort((a, b) => {
+          const timeA = a.tempsDepart.split(":").map(Number);
+          const timeB = b.tempsDepart.split(":").map(Number);
+          return timeA[0] * 60 + timeA[1] - (timeB[0] * 60 + timeB[1]);
+        });
+        setTrajets(sortedTrajets);
+      } catch (error) {
+        console.error("Error fetching trajets:", error);
+      }
+    };
+
+    fetchTrajets();
+  }, [from, to, mode]);
+
   const renderTicket = ({ item }) => {
-    const isSelected = item.id === selectedId;
+    const isSelected = item._id === selectedId;
     return (
       <TouchableOpacity
-        onPress={() => setSelectedId(item.id)}
+        onPress={() => setSelectedId(item._id)}
         style={[
           styles.ticketContainer,
           isSelected && styles.ticketContainerSelected,
@@ -155,13 +92,15 @@ const TravelTimes = () => {
           />
           <View style={styles.ticketTextContainer}>
             <Text style={styles.Destination}>
-              {item.departure} - {item.arrival}
+              {item.depart} - {item.arrivee}
             </Text>
             <Text style={styles.ticketText}>
-              {item.departureTime} - {item.arrivalTime}
+              Departs: {item.tempsDepart} - Arrives: {item.tempsArrivee}
             </Text>
-
-            <Text style={styles.durationText}>{item.duration}</Text>
+            <Text style={styles.ticketText}>
+              Duration: {calculateDuration(item.tempsDepart, item.tempsArrivee)}
+            </Text>
+            <Text style={styles.durationText}>Price: {item.prix} TND</Text>
           </View>
         </SafeAreaView>
         <View
@@ -184,14 +123,17 @@ const TravelTimes = () => {
       </Text>
 
       <FlatList
-        data={tickets.slice(0, displayedTicketsCount)}
+        data={trajets.slice(0, displayedTicketsCount)}
         renderItem={renderTicket}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) =>
+          item._id ? item._id.toString() : index.toString()
+        }
         extraData={selectedId}
       />
-      {displayedTicketsCount < tickets.length && (
+
+      {displayedTicketsCount < trajets.length && (
         <TouchableOpacity
-          onPress={() => setDisplayedTicketsCount(tickets.length)}
+          onPress={() => setDisplayedTicketsCount(trajets.length)}
           style={styles.viewMoreButton}
         >
           <Text>View All</Text>
@@ -200,22 +142,26 @@ const TravelTimes = () => {
 
       <TouchableOpacity
         onPress={() => {
-          const selectedTicket = tickets.find(
-            (ticket) => ticket.id === selectedId
+          const selectedTrajet = trajets.find(
+            (ticket) => ticket._id === selectedId
           );
-          if (selectedTicket) {
+          if (selectedTrajet) {
             navigation.navigate("TrackScreen", {
-              ticket: selectedTicket,
-              fromCoords: selectedTicket.coordinates.departure,
-              toCoords: selectedTicket.coordinates.arrival,
+              trajet: selectedTrajet,
             });
+          } else {
+            Alert.alert(
+              "Error",
+              "No ticket selected or ticket data is missing"
+            );
           }
         }}
         style={styles.reserveButton}
-        disabled={!selectedId}
+        disabled={!selectedId} // This disables the button if no ticket is selected
       >
         <Text style={styles.reserveButtonText}>Reserve</Text>
       </TouchableOpacity>
+
       <BottomAppBar />
     </SafeAreaView>
   );

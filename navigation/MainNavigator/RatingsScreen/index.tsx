@@ -50,7 +50,7 @@ const RateAndShareScreen = () => {
       try {
         const token = await AsyncStorage.getItem("userToken");
         const response = await axios.post(
-          "http://192.168.0.227:5000/ratingavis/createratingavis",
+          "http://192.168.1.53:5000/ratingavis/createratingavis",
           {
             number: rating,
             description: avis,

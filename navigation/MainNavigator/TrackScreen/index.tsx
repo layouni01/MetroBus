@@ -6,37 +6,35 @@ import BottomAppBar from "../../BottomNavBar";
 import styles from "../TrackScreen/styles";
 const TrackScreen = () => {
   const route = useRoute();
-  //const ticket = route.params;
-  const { ticket, fromCoords, toCoords } = route.params;
-  // const { fromCoords, toCoords } = route.params;
+  const { trajet } = route.params;
+
   const navigation = useNavigation();
-  // Dummy coordinates for the map, replace with actual data
-  const region = {
-    latitude: (fromCoords.latitude + toCoords.latitude) / 2,
-    longitude: (fromCoords.longitude + toCoords.longitude) / 2,
-    latitudeDelta: Math.abs(fromCoords.latitude - toCoords.latitude) * 2,
-    longitudeDelta: Math.abs(fromCoords.longitude - toCoords.longitude) * 2,
-  };
 
   return (
     <View style={styles.container}>
       <View style={styles.ticketInfo}>
         <Text style={styles.title}>Ticket:</Text>
         <Text style={styles.info}>
-          Destination: from {ticket.departure} To {ticket.arrival}
+          Destination: from {trajet.depart} To {trajet.arrivee}
         </Text>
         <Text style={styles.info}>
-          Time: {ticket.departureTime} - {ticket.arrivalTime}
+          Time: {trajet.tempsDepart} - {trajet.tempsArrivee}
         </Text>
-        <Text style={styles.info}>Price: {ticket.price || "Not provided"}</Text>
+        <Text style={styles.info}>Price: {trajet.prix || "Not provided"}</Text>
       </View>
-      <MapView style={styles.map} provider="google" initialRegion={region}>
-        <Marker coordinate={fromCoords} title="From Station" />
-        <Marker coordinate={toCoords} title="To Station" />
-      </MapView>
+      <MapView
+        style={styles.map}
+        provider="google"
+        initialRegion={{
+          latitude: 35.664025,
+          longitude: 10.827058,
+          latitudeDelta: 0.5,
+          longitudeDelta: 0.7,
+        }}
+      ></MapView>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Confirmation", ticket);
+          navigation.navigate("Confirmation", selectedTrajet);
         }}
         style={styles.confirmButton}
       >
