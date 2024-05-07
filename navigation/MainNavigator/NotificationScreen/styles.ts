@@ -35,5 +35,16 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 16,
   },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+  },
 });
 export default styles;

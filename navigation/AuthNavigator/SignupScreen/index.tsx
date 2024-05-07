@@ -62,7 +62,7 @@ const SignupScreen = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.0.227:5000/user/register",
+        "http://192.168.1.53:5000/user/register",
         userData
       );
       if (response.data) {
@@ -70,7 +70,7 @@ const SignupScreen = () => {
         Alert.alert(
           "Registration Successful",
           "You have been successfully registered!",
-          [{ text: "OK", onPress: () => Navigation.navigate("Login") }]
+          [{ text: "OK", onPress: () => Navigation.navigate("ChooseStation") }]
         );
       }
     } catch (error) {

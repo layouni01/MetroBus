@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     flex: 1,
+    color: "black",
   },
   email: {
     color: "grey",

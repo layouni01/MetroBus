@@ -8,7 +8,8 @@ import EditProfile from "./EditProfile";
 import BottomAppBar from "../BottomNavBar";
 import HistoryScreen from "./HistoryScreen";
 import ChooseStation from "./ChooseStation";
-
+import LegalPoliciesScreen from "./LegalPoliciesScreen";
+import HelpSupportScreen from "./HelpSupportScreen";
 import TravelTimes from "./TravelTimes";
 import ProfileScreen from "./ProfileScreen";
 import RatingsScreen from "./RatingsScreen";
@@ -46,6 +47,11 @@ const MainNavigator = () => {
         />
         <MainStack.Screen name="TrackScreen" component={TrackScreen} />
         <MainStack.Screen name="QRcode" component={QRCode} />
+        <MainStack.Screen
+          name="Legal and Policies"
+          component={LegalPoliciesScreen}
+        />
+        <MainStack.Screen name="Help & Support" component={HelpSupportScreen} />
       </MainStack.Navigator>
     </NavigationContainer>
   );

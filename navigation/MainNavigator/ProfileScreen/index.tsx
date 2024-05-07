@@ -18,6 +18,9 @@ const ProfileScreen = () => {
   const [profilePic, setProfilePic] = useState(
     "https://via.placeholder.com/150"
   );
+  const [user, setUser] = useState({ name: "", email: "", lastName: "" });
+  const navigation = useNavigation();
+
   useEffect(() => {
     const loadProfilePic = async () => {
       const savedProfilePic = await AsyncStorage.getItem("profilePic");
@@ -28,11 +31,33 @@ const ProfileScreen = () => {
     loadProfilePic();
   }, []);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userId = await AsyncStorage.getItem("userId");
+        console.log("User ID: ", userId);
+        if (!userId) {
+          Alert.alert("Error", "User ID not found");
+          return;
+        }
+        const response = await axios.get(
+          `http://192.168.0.227:5000/user/${userId}`
+        );
+        setUser(response.data);
+      } catch (error) {
+        Alert.alert("Error", "Failed to fetch user data");
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const handleSignOut = async () => {
     AsyncStorage.removeItem("token");
     navigation.navigate("Login" as never);
   };
-  const navigation = useNavigation();
+
   const MenuItem = ({ icon, text, onPress }) => (
     <TouchableOpacity style={styles.menuItem} onPress={onPress}>
       <Ionicons name={icon} size={24} color="black" />
@@ -49,8 +74,10 @@ const ProfileScreen = () => {
             style={styles.profileImage}
           />
           <View style={{ flex: 1 }}>
-            <Text style={styles.name}>Firas Layouni</Text>
-            <Text style={styles.email}>firaslayouni@gmail.com</Text>
+            <Text style={styles.name}>
+              {user.name} {user.lastName}
+            </Text>
+            <Text style={styles.email}>{user.email}</Text>
           </View>
           <TouchableOpacity
             onPress={() => navigation.navigate("Edit Profile" as never)}
@@ -71,8 +98,16 @@ const ProfileScreen = () => {
             text="Avis and ratings"
             onPress={() => navigation.navigate("Ratings" as never)}
           />
-          <MenuItem icon="document-text" text="Legal and Policies" />
-          <MenuItem icon="help-circle" text="Help & Support" />
+          <MenuItem
+            icon="document-text"
+            text="Legal and Policies"
+            onPress={() => navigation.navigate("Legal and Policies" as never)}
+          />
+          <MenuItem
+            icon="help-circle"
+            text="Help & Support"
+            onPress={() => navigation.navigate("Help & Support" as never)}
+          />
         </View>
 
         <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
