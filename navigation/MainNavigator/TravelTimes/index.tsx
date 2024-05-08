@@ -53,7 +53,7 @@ const TravelTimes = () => {
     const fetchTrajets = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.1.53:5000/trajet/getAllTrajet`,
+          `http://192.168.1.64:5000/trajet/getAllTrajet`,
           {
             params: { depart: from, arrivee: to, Type: mode },
           }

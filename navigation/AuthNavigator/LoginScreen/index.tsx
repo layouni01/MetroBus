@@ -28,25 +28,23 @@ const LoginScreen = () => {
     }
 
     try {
-      const response = await axios.post("http://192.168.1.53:5000/user/login", {
+      const response = await axios.post("http://192.168.1.64:5000/user/login", {
         email: email.trim(),
         password: password,
       });
 
       if (response.data && response.data.accesstoken && response.data.userId) {
         await AsyncStorage.setItem("userToken", response.data.accesstoken);
-        // await AsyncStorage.setItem("userId", response.data._id);
-        console.log(response.data);
-        Navigation.navigate("ChooseStation"); // Assuming 'ChooseStation' is the next screen after login
+        await AsyncStorage.setItem("users._id", response.data.userId.toString()); // corrected line
+        console.log("Login successful, data:", response.data);
+        Navigation.navigate("ChooseStation");
       } else {
-        throw new Error("No token received");
+        throw new Error("Authentication successful but no token received");
       }
     } catch (error) {
-      const errorMessage = error.response
-        ? error.response.data.msg
-        : "Login failed. Please try again.";
+      const errorMessage = error.response ? error.response.data.msg : "Login failed. Please try again.";
       Alert.alert("Login Error", errorMessage);
-      console.log(error);
+      console.log("Login error:", error);
     }
   };
   // State variable to track password visibility

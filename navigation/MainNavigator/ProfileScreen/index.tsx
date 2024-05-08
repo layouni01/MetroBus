@@ -22,36 +22,31 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const loadProfilePic = async () => {
-      const savedProfilePic = await AsyncStorage.getItem("profilePic");
-      if (savedProfilePic) {
-        setProfilePic(savedProfilePic);
-      }
-    };
-    loadProfilePic();
-  }, []);
-
-  useEffect(() => {
     const fetchUserData = async () => {
       try {
         const userId = await AsyncStorage.getItem("userId");
-        console.log("User ID: ", userId);
         if (!userId) {
           Alert.alert("Error", "User ID not found");
           return;
         }
-        const response = await axios.get(
-          `http://192.168.0.227:5000/user/${userId}`
-        );
+        if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
+          Alert.alert("Error", "Invalid User ID format");
+          return;
+        }
+        const response = await axios.get(`http://192.168.43.54:5000/user/user/${userId}`);
         setUser(response.data);
       } catch (error) {
-        Alert.alert("Error", "Failed to fetch user data");
+        if (error.response && error.response.status === 404) {
+          Alert.alert("Error", "User not found. Please make sure the user ID is correct.");
+        } else {
+          Alert.alert("Error", "Failed to fetch user data");
+        }
         console.error("Failed to fetch user data:", error);
       }
     };
-
     fetchUserData();
   }, []);
+
 
   const handleSignOut = async () => {
     AsyncStorage.removeItem("token");

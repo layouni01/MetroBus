@@ -1,59 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
-  ScrollView,
   Text,
-  View,
   TouchableOpacity,
-} from "react-native";
-import { HeaderBackButton } from "@react-navigation/elements";
-import { useNavigation } from "@react-navigation/native";
+  View,
+  Alert,
+} from 'react-native';
+import axios from 'axios';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import BottomAppBar from "../../BottomNavBar";
 import styles from "./styles";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const HistoryScreen = () => {
-  const navigation = useNavigation();
-  const fakeTickets = [
-    {
-      Id_réservation: 1,
-      Date_rev: new Date("2024-03-25"),
-      Price: 50.99,
-      Destination: "New York",
-    },
-    {
-      Id_réservation: 2,
-      Date_rev: new Date("2024-04-02"),
-      Price: 75.5,
-      Destination: "London",
-    },
-    {
-      Id_réservation: 3,
-      Date_rev: new Date("2024-04-10"),
-      Price: 120.75,
-      Destination: "Tokyo",
-    },
-    // Add more fake ticket
-  ];
+  const [tickets, setTickets] = useState([]);
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const response = await axios.get('http://192.168.1.64:5000/ticket/getAllTickets');
+        setTickets(response.data);
+      } catch (error) {
+        Alert.alert('Error fetching tickets', error.message);
+        console.error('Failed to fetch tickets:', error);
+      }
+    };
+
+    fetchTickets();
+  }, []);
+
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.ticketItem}>
-      <Text style={styles.ticketTitle}>
-        Reservation ID: {item.Id_réservation}
-      </Text>
-      <Text>Date: {item.Date_rev.toDateString()}</Text>
-      <Text>Price: ${item.Price.toFixed(2)}</Text>
-      <Text>Destination: {item.Destination}</Text>
+      <Text style={styles.ticketTitle}>Reservation ID: {item._id}</Text>
+      <Text>Date: {new Date(item.dateReservation).toDateString()}</Text>
+      <Text>Price: ${item.price.toFixed(2)}</Text>
+      <Text>Destination: {item.destination}</Text>
     </TouchableOpacity>
   );
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={fakeTickets}
+        data={tickets}
         renderItem={renderItem}
-        keyExtractor={(item) => item.Id_réservation.toString()}
+        keyExtractor={(item) => item._id}
         style={styles.flatList}
       />
-
       <BottomAppBar />
     </SafeAreaView>
   );
