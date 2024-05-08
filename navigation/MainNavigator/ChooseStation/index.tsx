@@ -28,7 +28,7 @@ const ChooseStation = () => {
     const fetchStations = async () => {
       try {
         const response = await axios.get(
-          "http://192.168.1.64:5000/station/getAllStations"
+          "http://192.168.1.43:5000/station/getAllStations"
         );
 
         setStations(

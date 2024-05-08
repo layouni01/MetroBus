@@ -5,13 +5,18 @@ import BottomAppBar from "../../BottomNavBar";
 import styles from "./styles";
 
 const QRCodeScreen = ({ route }) => {
-  const { ticketData } = route.params;
-  const qrCodeValue = JSON.stringify({
-    To: ticketData.arrival,
-    From: ticketData.departure,
-    departureTime: ticketData.departureTime,
-    arrivalTime: ticketData.arrivalTime,
-  });
+  const { trajet } = route.params;
+  const qrCodeValue = JSON.stringify(
+    {
+      To: trajet.arrivee,
+      From: trajet.depart,
+      departureTime: trajet.tempsDepart,
+      arrivalTime: trajet.tempsArrivee,
+      Prix: trajet.prix, //
+    },
+    null,
+    2
+  );
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
