@@ -14,15 +14,16 @@ import styles from "./styles";
 import { useNavigation, useRoute } from "@react-navigation/native";
 const ConfirmationScreen = () => {
   const route = useRoute();
-  const ticket = useRoute().params;
+  const { trajet } = useRoute().params;
   const navigation = useNavigation();
   const goToQRCodeScreen = () => {
-    if (ticket) {
-      navigation.navigate("QRcode", { ticketData: ticket });
-    } else {
+    if (!trajet) {
       Alert.alert("Error", "Ticket data is missing.");
+    } else {
+      navigation.navigate("QRcode", { trajet }); // Ensuring the trajet is passed as an object with a key 'trajet'
     }
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>

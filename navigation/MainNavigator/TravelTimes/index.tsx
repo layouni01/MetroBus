@@ -14,29 +14,6 @@ import styles from "./styles";
 import BottomAppBar from "../../BottomNavBar";
 import { Colors } from "../../../utils";
 // Mock data for the list of tickets
-const calculateDuration = (startTime, endTime) => {
-  // Extract hours and minutes from startTime and endTime
-  const [startHour, startMinute] = startTime.split(":").map(Number);
-  const [endHour, endMinute] = endTime.split(":").map(Number);
-
-  // Convert both times to minutes since midnight
-  const startTotalMinutes = startHour * 60 + startMinute;
-  const endTotalMinutes = endHour * 60 + endMinute;
-
-  // Calculate the duration in minutes
-  let durationMinutes = endTotalMinutes - startTotalMinutes;
-  if (durationMinutes < 0) {
-    // This condition accounts for overnight scenarios where the end time is on the next day
-    durationMinutes += 24 * 60;
-  }
-
-  // Convert minutes into hours and minutes
-  const hours = Math.floor(durationMinutes / 60);
-  const minutes = durationMinutes % 60;
-
-  // Return the duration in a formatted string
-  return `${hours}h ${minutes}m`;
-};
 
 const TravelTimes = () => {
   const route = useRoute();
@@ -53,7 +30,7 @@ const TravelTimes = () => {
     const fetchTrajets = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.1.53:5000/trajet/getAllTrajet`,
+          `http://192.168.1.43:5000/trajet/getAllTrajet`,
           {
             params: { depart: from, arrivee: to, Type: mode },
           }
@@ -97,9 +74,7 @@ const TravelTimes = () => {
             <Text style={styles.ticketText}>
               Departs: {item.tempsDepart} - Arrives: {item.tempsArrivee}
             </Text>
-            <Text style={styles.ticketText}>
-              Duration: {calculateDuration(item.tempsDepart, item.tempsArrivee)}
-            </Text>
+
             <Text style={styles.durationText}>Price: {item.prix} TND</Text>
           </View>
         </SafeAreaView>
