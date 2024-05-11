@@ -19,6 +19,7 @@ import styles from "./styles";
 import { FontAwesome } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import * as FileSystem from "expo-file-system";
 
 const EditProfile = () => {
   const [user, setUser] = useState({
@@ -26,42 +27,17 @@ const EditProfile = () => {
     lastName: "",
     email: "",
     password: "",
+    photo: ""
   });
-  const [profilePic, setProfilePic] = useState(null);
   const [showPassword, setShowPassword] = useState(false);  // Correctly initialize here
-
-  const navigation = useNavigation();
-  const loadProfilePic = async () => {
-    try {
-      const savedProfilePic = await AsyncStorage.getItem("profilePic");
-      if (savedProfilePic) {
-        setProfilePic(savedProfilePic);
-      }
-    } catch (e) {
-      console.error("Failed to load the profile photo.", e);
-    }
-  };
-
-  useEffect(() => {
-    loadProfilePic();
-  }, []);
-
-  ;
-
-
-
-
-  const handleTextChange = (name, value) => {
-    setUser((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
 
   const handleChooseProfilePic = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert("Permission required", "Sorry, we need camera roll permissions to make this work!");
+      Alert.alert(
+        "Permission required",
+        "Sorry, we need camera roll permissions to make this work!"
+      );
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -70,24 +46,85 @@ const EditProfile = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    if (!result.canceled && result.assets) {
+    if (!result.cancelled && result.assets) {
       const uri = result.assets[0].uri;
-      setProfilePic(uri);
+      const base64 = await convertImageToBase64(uri);
+
+      setUser((prevState) => ({
+        ...prevState,
+        photo: base64,
+      }));
       await AsyncStorage.setItem("profilePic", uri);
     }
   };
+  const convertImageToBase64 = async (uri) => {
+    try {
+      const base64 = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      return base64;
+    } catch (error) {
+      console.error("Failed to convert image to base64:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+
+    const fetchUserData = async () => {
+
+      try {
+        const token = await AsyncStorage.getItem("userToken");
+        console.log("token:", token)
+
+
+        const response = await axios.get(`http://192.168.43.54:5000/user/user`, { headers: { Authorization: `Bearer ${token}` } });
+
+        console.log(response.data)
+        setUser({ ...user, name: response.data.name, lastName: response.data.lastName, email: response.data.email, photo: response.data.photo });
+      } catch (error) {
+
+        console.log(error.response.data)
+      }
+    };
+    fetchUserData();
+
+  }, []);
+  ;
+
+
+
+
+  const handleTextChange = async (name, value) => {
+    setUser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+
+
 
   const toggleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   const handleSaveProfile = async () => {
+    console.log('user:', user)
     if (!user.email || !user.name || !user.lastName) {
       Alert.alert("Required fields", "All fields must be filled.");
-      return;
     }
-    // Add API call to save user data here
-    console.log("Saving user:", user);
+    try {
+      const token = await AsyncStorage.getItem("userToken");
+      console.log(token);
+      const res = await axios.put('http://192.168.43.54:5000/user/updateUser', user, { headers: { Authorization: `Bearer ${token}` } })
+      console.log(res.data)
+      Alert.alert("user is updated successfully!!");
+    } catch (error) {
+      console.log(error.response.data)
+    }
+
+
 
 
   };
@@ -98,7 +135,7 @@ const EditProfile = () => {
         <ScrollView>
           <View>
             <TouchableOpacity onPress={handleChooseProfilePic}>
-              <Image source={{ uri: profilePic }} style={styles.profilePic} />
+              <Image source={{ uri: "data:image/png;base64," + user.photo }} style={styles.profilePic} />
               <View style={styles.cameraIcon}>
                 <FontAwesome name="camera" size={24} color="white" />
               </View>
@@ -156,6 +193,8 @@ const EditProfile = () => {
                 secureTextEntry={!showPassword}
                 placeholder="Password"
                 placeholderTextColor="#4458"
+                onChangeText={(text) => handleTextChange("password", text)}
+
               />
               <Ionicons
                 name={showPassword ? "eye-outline" : "eye-off-outline"}

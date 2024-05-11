@@ -10,6 +10,8 @@ import {
 import styles from "../NotificationScreen/styles";
 import { useNavigation } from "@react-navigation/native";
 import BottomAppBar from "../../BottomNavBar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import axios from "axios";
 
 const NotificationsScreen = () => {
@@ -22,8 +24,10 @@ const NotificationsScreen = () => {
 
   const loadNotifications = async () => {
     try {
+      const token = await AsyncStorage.getItem("userToken");
+
       const response = await axios.get(
-        "http://192.168.1.53:5000/notification/getAllnotification"
+        "http://192.168.43.54:5000/notification/getAllnotification", { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.data && response.data.length > 0) {
         const fetchedNotifications = response.data.map((notification) => ({

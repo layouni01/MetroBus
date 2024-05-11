@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import BottomAppBar from "../../BottomNavBar";
 import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChooseStation = () => {
   const navigation = useNavigation();
@@ -25,17 +26,18 @@ const ChooseStation = () => {
   const [fromOptions, setFromOptions] = useState(stations);
   const [toOptions, setToOptions] = useState(stations);
   useEffect(() => {
+    console.log(AsyncStorage.getItem("userToken"))
     const fetchStations = async () => {
       try {
         const response = await axios.get(
-          "http://192.168.1.43:5000/station/getAllStations"
+          "http://192.168.43.54:5000/station/getAllStations"
         );
 
         setStations(
           response.data.map((station) => ({
             label: station.nom_station,
             value: station.nom_station,
-            coordinates: station.coordinates, // ensure your station model includes coordinates if needed
+            coordinates: station.coordinates,
           }))
         );
       } catch (error) {

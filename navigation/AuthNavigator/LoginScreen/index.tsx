@@ -28,16 +28,15 @@ const LoginScreen = () => {
     }
 
     try {
-      const response = await axios.post("http://192.168.1.43:5000/user/login", {
+      const response = await axios.post("http://192.168.43.54:5000/user/login", {
         email: email.trim(),
         password: password,
       });
 
-      if (response.data && response.data.accesstoken && response.data.userId) {
-        await AsyncStorage.setItem("userToken", response.data.accesstoken);
-        await AsyncStorage.setItem("users._id", response.data.userId.toString()); // corrected line
+      if (response.data && response.data.accesstoken) {
+        await AsyncStorage.setItem("userToken", response.data.accesstoken.toString());
         console.log("Login successful, data:", response.data);
-        Navigation.navigate("ChooseStation");
+        Navigation.navigate("Home" as never);
       } else {
         throw new Error("Authentication successful but no token received");
       }

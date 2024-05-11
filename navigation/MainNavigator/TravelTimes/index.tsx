@@ -13,7 +13,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import styles from "./styles";
 import BottomAppBar from "../../BottomNavBar";
 import { Colors } from "../../../utils";
-// Mock data for the list of tickets
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TravelTimes = () => {
   const route = useRoute();
@@ -24,24 +24,38 @@ const TravelTimes = () => {
   const navigation = useNavigation();
   // Determine the icon based on the mode
   const getIconName = () => {
-    return mode === "train" ? "train-outline" : "bus-outline";
+    return mode === "metro" ? "train-outline" : "bus-outline";
   };
+
   useEffect(() => {
     const fetchTrajets = async () => {
+      const token = await AsyncStorage.getItem("userToken")
+
       try {
         const response = await axios.get(
-          `http://192.168.1.43:5000/trajet/getAllTrajet`,
+          `http://192.168.43.54:5000/trajet/getAllTrajet`,
           {
-            params: { depart: from, arrivee: to, Type: mode },
+            params: { depart: from, arrivee: to, Type: mode }, headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
         );
+        const currentTime = new Date();
         // Sort the trajets by departure time
-        const sortedTrajets = response.data.sort((a, b) => {
-          const timeA = a.tempsDepart.split(":").map(Number);
-          const timeB = b.tempsDepart.split(":").map(Number);
-          return timeA[0] * 60 + timeA[1] - (timeB[0] * 60 + timeB[1]);
-        });
-        setTrajets(sortedTrajets);
+        const sortedAndFilteredTrajets = response.data
+          .filter((trajet) => {
+            const [hours, minutes] = trajet.tempsDepart.split(":").map(Number);
+            const trajetDate = new Date(currentTime);
+            trajetDate.setHours(hours, minutes, 0);
+            return trajetDate > currentTime;
+          })
+          .sort((a, b) => {
+            const timeA = a.tempsDepart.split(":").map(Number);
+            const timeB = b.tempsDepart.split(":").map(Number);
+            return timeA[0] * 60 + timeA[1] - (timeB[0] * 60 + timeB[1]);
+          });
+
+        setTrajets(sortedAndFilteredTrajets);
       } catch (error) {
         console.error("Error fetching trajets:", error);
       }
@@ -97,45 +111,51 @@ const TravelTimes = () => {
         Destination: from {from} To {to}
       </Text>
 
-      <FlatList
-        data={trajets.slice(0, displayedTicketsCount)}
-        renderItem={renderTicket}
-        keyExtractor={(item, index) =>
-          item._id ? item._id.toString() : index.toString()
-        }
-        extraData={selectedId}
-      />
+      {trajets.length > 0 ? (
+        <>
+          <FlatList
+            data={trajets.slice(0, displayedTicketsCount)}
+            renderItem={renderTicket}
+            keyExtractor={(item, index) =>
+              item._id ? item._id.toString() : index.toString()
+            }
+            extraData={selectedId}
+          />
 
-      {displayedTicketsCount < trajets.length && (
-        <TouchableOpacity
-          onPress={() => setDisplayedTicketsCount(trajets.length)}
-          style={styles.viewMoreButton}
-        >
-          <Text>View All</Text>
-        </TouchableOpacity>
+          {displayedTicketsCount < trajets.length && (
+            <TouchableOpacity
+              onPress={() => setDisplayedTicketsCount(trajets.length)}
+              style={styles.viewMoreButton}
+            >
+              <Text>View All</Text>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity
+            onPress={() => {
+              const selectedTrajet = trajets.find(
+                (ticket) => ticket._id === selectedId
+              );
+              if (selectedTrajet) {
+                navigation.navigate("TrackScreen", {
+                  trajet: selectedTrajet,
+                });
+              } else {
+                Alert.alert(
+                  "Error",
+                  "No ticket selected or ticket data is missing"
+                );
+              }
+            }}
+            style={styles.reserveButton}
+            disabled={!selectedId} // This disables the button if no ticket is selected
+          >
+            <Text style={styles.reserveButtonText}>Reserve</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <Text style={styles.noTicketsText}>No ticket available for today</Text>
       )}
-
-      <TouchableOpacity
-        onPress={() => {
-          const selectedTrajet = trajets.find(
-            (ticket) => ticket._id === selectedId
-          );
-          if (selectedTrajet) {
-            navigation.navigate("TrackScreen", {
-              trajet: selectedTrajet,
-            });
-          } else {
-            Alert.alert(
-              "Error",
-              "No ticket selected or ticket data is missing"
-            );
-          }
-        }}
-        style={styles.reserveButton}
-        disabled={!selectedId} // This disables the button if no ticket is selected
-      >
-        <Text style={styles.reserveButtonText}>Reserve</Text>
-      </TouchableOpacity>
 
       <BottomAppBar />
     </SafeAreaView>

@@ -8,7 +8,7 @@ const BottomAppBar = () => {
   const navigation = useNavigation();
 
   const goToHome = () => {
-    navigation.navigate("ChooseStation" as never);
+    navigation.navigate("Home" as never);
   };
   const goToProfile = () => {
     navigation.navigate("Profile" as never);

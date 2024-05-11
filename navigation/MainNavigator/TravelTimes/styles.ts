@@ -1,6 +1,5 @@
 import { Platform, StyleSheet } from "react-native";
 import { Colors } from "../../../utils"; // Ensure Colors is properly defined
-import Destination from "../Destination";
 
 const styles = StyleSheet.create({
   container: {
@@ -103,6 +102,14 @@ const styles = StyleSheet.create({
     alignContent: "center",
     flexDirection: "row",
   },
+  noTicketsText: {
+    fontSize: 18,
+    color: "grey",
+    textAlign: "center",
+    marginTop: 300,
+    fontWeight: "bold",
+  },
+
 });
 
 export default styles;

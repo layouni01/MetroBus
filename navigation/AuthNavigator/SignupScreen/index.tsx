@@ -14,6 +14,7 @@ import styles from "./styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Colors } from "../../../utils";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const logo = require("../../../assets/logo.png");
 
 const SignupScreen = () => {
@@ -62,15 +63,17 @@ const SignupScreen = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.1.53:5000/user/register",
+        "http://192.168.43.54:5000/user/register",
         userData
       );
       if (response.data) {
         // Success alert
+        await AsyncStorage.setItem("userToken", response.data.accesstoken.toString());
+
         Alert.alert(
           "Registration Successful",
           "You have been successfully registered!",
-          [{ text: "OK", onPress: () => Navigation.navigate("ChooseStation") }]
+          [{ text: "OK", onPress: () => Navigation.navigate("Home") }]
         );
       }
     } catch (error) {

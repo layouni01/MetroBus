@@ -33,10 +33,9 @@ const MainNavigator = () => {
           component={ForgotPasswordScreen}
         />
         <MainStack.Screen name="SignUp" component={SignupScreen} />
-
         <MainStack.Screen name="Profile" component={ProfileScreen} />
         <MainStack.Screen name="History" component={HistoryScreen} />
-        <MainStack.Screen name="ChooseStation" component={ChooseStation} />
+        <MainStack.Screen name="Home" options={{ headerLeft: null, headerBackVisible: false }} component={ChooseStation} />
         <MainStack.Screen name="TravelTimes" component={TravelTimes} />
         <MainStack.Screen name="Edit Profile" component={EditProfile} />
         <MainStack.Screen name="Ratings" component={RatingsScreen} />

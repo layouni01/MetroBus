@@ -18,22 +18,18 @@ const ProfileScreen = () => {
   const [profilePic, setProfilePic] = useState(
     "https://via.placeholder.com/150"
   );
-  const [user, setUser] = useState({ name: "", email: "", lastName: "" });
-  const navigation = useNavigation();
+  const [user, setUser] = useState({ name: "", email: "", lastName: "", photo: "" });
 
+  const navigation = useNavigation();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userId = await AsyncStorage.getItem("userId");
-        if (!userId) {
-          Alert.alert("Error", "User ID not found");
-          return;
-        }
-        if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
-          Alert.alert("Error", "Invalid User ID format");
-          return;
-        }
-        const response = await axios.get(`http://192.168.43.54:5000/user/user/${userId}`);
+        const token = await AsyncStorage.getItem("userToken");
+        console.log("token:", token)
+
+        const response = await axios.get(`http://192.168.43.54:5000/user/user`, { headers: { Authorization: `Bearer ${token}` } });
+
+        console.log(response.data)
         setUser(response.data);
       } catch (error) {
         if (error.response && error.response.status === 404) {
@@ -45,11 +41,13 @@ const ProfileScreen = () => {
       }
     };
     fetchUserData();
+
   }, []);
 
 
   const handleSignOut = async () => {
-    AsyncStorage.removeItem("token");
+    AsyncStorage.removeItem("userToken");
+
     navigation.navigate("Login" as never);
   };
 
@@ -65,7 +63,7 @@ const ProfileScreen = () => {
       <ScrollView>
         <View style={styles.profileSection}>
           <Image
-            source={{ uri: profilePic }} // Replace with actual image path
+            source={{ uri: "data:image/png;base64," + user.photo }} // Replace with actual image path
             style={styles.profileImage}
           />
           <View style={{ flex: 1 }}>

@@ -54,7 +54,7 @@ const TrackScreen = () => {
     try {
       const token = await AsyncStorage.getItem("userToken"); // Assuming token is stored in AsyncStorage
       const response = await axios.post(
-        "http://192.168.1.43:5000/ticket/create",
+        "http://192.168.43.54:5000/ticket/create",
         {
           trajet: trajet._id, // Assuming you have the trajet ID
           dateReservation: new Date().toISOString(), // Current date as reservation date

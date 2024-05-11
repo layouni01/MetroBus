@@ -33,7 +33,7 @@ const RateAndShareScreen = () => {
       stars.push(
         <TouchableOpacity key={i} onPress={() => setRating(i)}>
           <Ionicons
-            name={i <= rating ? "ios-star-sharp" : "ios-star-outline"}
+            name={i <= rating ? "star" : "star-outline"}
             size={50}
             color={i <= rating ? "#FFD64C" : "#ccc"}
           />
@@ -50,7 +50,7 @@ const RateAndShareScreen = () => {
       try {
         const token = await AsyncStorage.getItem("userToken");
         const response = await axios.post(
-          "http://192.168.1.64:5000/ratingavis/createratingavis",
+          "http://192.168.43.54:5000/ratingavis/createratingavis",
           {
             number: rating,
             description: avis,
