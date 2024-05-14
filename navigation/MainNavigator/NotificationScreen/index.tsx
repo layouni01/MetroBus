@@ -27,15 +27,21 @@ const NotificationsScreen = () => {
       const token = await AsyncStorage.getItem("userToken");
 
       const response = await axios.get(
-        "http://192.168.43.54:5000/notification/getAllnotification", { headers: { Authorization: `Bearer ${token}` } }
+        "http://192.168.1.16:5000/notification/getAllnotification",
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.data && response.data.length > 0) {
-        const fetchedNotifications = response.data.map((notification) => ({
+        let fetchedNotifications = response.data.map((notification) => ({
           id: notification._id,
           title: notification.title,
-          date: new Date(notification.date).toLocaleDateString(),
+          date: new Date(notification.date),
           content: notification.message,
           expanded: false,
+        }));
+        fetchedNotifications.sort((a, b) => b.date - a.date);
+        fetchedNotifications = fetchedNotifications.map((notification) => ({
+          ...notification,
+          date: notification.date.toLocaleDateString(),
         }));
         setNotifications(fetchedNotifications);
       } else {

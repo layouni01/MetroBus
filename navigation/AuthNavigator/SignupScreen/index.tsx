@@ -63,12 +63,15 @@ const SignupScreen = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.43.54:5000/user/register",
+        "http://192.168.1.16:5000/user/register",
         userData
       );
       if (response.data) {
         // Success alert
-        await AsyncStorage.setItem("userToken", response.data.accesstoken.toString());
+        await AsyncStorage.setItem(
+          "userToken",
+          response.data.accesstoken.toString()
+        );
 
         Alert.alert(
           "Registration Successful",

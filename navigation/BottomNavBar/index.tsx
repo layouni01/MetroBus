@@ -13,6 +13,9 @@ const BottomAppBar = () => {
   const goToProfile = () => {
     navigation.navigate("Profile" as never);
   };
+  const goToNotifications = () => {
+    navigation.navigate("Notifications" as never);
+  };
 
   const goToHistory = () => {
     navigation.navigate("History" as never);
@@ -28,6 +31,13 @@ const BottomAppBar = () => {
       <TouchableOpacity onPress={goToHistory} style={styles.iconContainer}>
         <FontAwesome name="history" size={24} color="#FFA300" />
         <Text style={styles.iconText}>History</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={goToNotifications}
+        style={styles.iconContainer}
+      >
+        <FontAwesome name="bell" size={24} color="#FFA300" />
+        <Text style={styles.iconText}>Notification</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={goToProfile} style={styles.iconContainer}>
         <FontAwesome name="user" size={24} color="#FFA300" />

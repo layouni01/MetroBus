@@ -28,20 +28,25 @@ const LoginScreen = () => {
     }
 
     try {
-      const response = await axios.post("http://192.168.43.54:5000/user/login", {
+      const response = await axios.post("http://192.168.1.16:5000/user/login", {
         email: email.trim(),
         password: password,
       });
 
       if (response.data && response.data.accesstoken) {
-        await AsyncStorage.setItem("userToken", response.data.accesstoken.toString());
+        await AsyncStorage.setItem(
+          "userToken",
+          response.data.accesstoken.toString()
+        );
         console.log("Login successful, data:", response.data);
         Navigation.navigate("Home" as never);
       } else {
         throw new Error("Authentication successful but no token received");
       }
     } catch (error) {
-      const errorMessage = error.response ? error.response.data.msg : "Login failed. Please try again.";
+      const errorMessage = error.response
+        ? error.response.data.msg
+        : "Login failed. Please try again.";
       Alert.alert("Login Error", errorMessage);
       console.log("Login error:", error);
     }
@@ -87,7 +92,7 @@ const LoginScreen = () => {
           />
         </View>
         <TouchableOpacity
-          onPress={() => Navigation.navigate("ForgetPassword" as never)}
+          onPress={() => Navigation.navigate("ForgotPassword" as never)}
         >
           <Text style={styles.textforget}> Forgot Password?</Text>
         </TouchableOpacity>
@@ -98,7 +103,7 @@ const LoginScreen = () => {
         <View style={styles.signupp}>
           <Text style={styles.textF}> Don’t have an account? </Text>
           <TouchableOpacity
-            onPress={() => Navigation.navigate("SignUp" as never)}
+            onPress={() => Navigation.navigate("Signup" as never)}
           >
             <Text style={styles.textF2}> sign up</Text>
           </TouchableOpacity>

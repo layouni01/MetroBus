@@ -14,7 +14,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { HeaderBackButton } from "@react-navigation/elements";
 import styles from "./styles";
 import { Colors } from "../../../utils";
-import emailjs from '@emailjs/browser';
+import emailjs from "@emailjs/browser";
 const Stack = createStackNavigator();
 
 const ForgotPasswordScreen = () => {
@@ -27,13 +27,17 @@ const ForgotPasswordScreen = () => {
   };
   const sendEmail = (e) => {
     e.preventDefault();
-    emailjs.sendForm('service_h3kdead', 'template_kubjq65', 'YjmQWR_aDHBTftS3g')
-      .then((result) => {
-        console.log(result.text);
-      }, (error) => {
-        console.log(error.text);
-      });
-    window.location.href = '/'
+    emailjs
+      .sendForm("service_h3kdead", "template_kubjq65", "YjmQWR_aDHBTftS3g")
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+    window.location.href = "/";
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>

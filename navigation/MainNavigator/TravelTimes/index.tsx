@@ -29,15 +29,16 @@ const TravelTimes = () => {
 
   useEffect(() => {
     const fetchTrajets = async () => {
-      const token = await AsyncStorage.getItem("userToken")
+      const token = await AsyncStorage.getItem("userToken");
 
       try {
         const response = await axios.get(
-          `http://192.168.43.54:5000/trajet/getAllTrajet`,
+          `http://192.168.1.16:5000/trajet/getAllTrajet`,
           {
-            params: { depart: from, arrivee: to, Type: mode }, headers: {
-              Authorization: `Bearer ${token}`
-            }
+            params: { depart: from, arrivee: to, Type: mode },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         const currentTime = new Date();

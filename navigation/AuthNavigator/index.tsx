@@ -3,8 +3,6 @@ import React from "react";
 import LoginScreen from "./LoginScreen";
 import SignupScreen from "./SignupScreen";
 import ForgotPasswordScreen from "./ForgotPasswordScreen";
-import ChooseStation from "../MainNavigator/ChooseStation";
-import ProfileScreen from "../MainNavigator/ProfileScreen";
 const AuthStack = createNativeStackNavigator();
 const AuthNavigator = () => {
   return (
@@ -22,7 +20,7 @@ const AuthNavigator = () => {
       <AuthStack.Screen
         name="ForgotPassword"
         component={ForgotPasswordScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: "Forgot Password" }}
       />
     </AuthStack.Navigator>
   );

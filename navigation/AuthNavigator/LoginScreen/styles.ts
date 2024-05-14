@@ -4,8 +4,7 @@ import { Colors } from "../../../utils";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //paddingTop: 70,
-    //padding: 20,
+    paddingTop: 70,
   },
   logo: {
     width: "100%",

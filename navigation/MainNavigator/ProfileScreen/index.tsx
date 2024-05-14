@@ -18,22 +18,32 @@ const ProfileScreen = () => {
   const [profilePic, setProfilePic] = useState(
     "https://via.placeholder.com/150"
   );
-  const [user, setUser] = useState({ name: "", email: "", lastName: "", photo: "" });
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    lastName: "",
+    photo: "",
+  });
 
   const navigation = useNavigation();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = await AsyncStorage.getItem("userToken");
-        console.log("token:", token)
+        console.log("token:", token);
 
-        const response = await axios.get(`http://192.168.43.54:5000/user/user`, { headers: { Authorization: `Bearer ${token}` } });
+        const response = await axios.get(`http://192.168.1.16:5000/user/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-        console.log(response.data)
+        console.log(response.data);
         setUser(response.data);
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          Alert.alert("Error", "User not found. Please make sure the user ID is correct.");
+          Alert.alert(
+            "Error",
+            "User not found. Please make sure the user ID is correct."
+          );
         } else {
           Alert.alert("Error", "Failed to fetch user data");
         }
@@ -41,14 +51,12 @@ const ProfileScreen = () => {
       }
     };
     fetchUserData();
-
   }, []);
-
 
   const handleSignOut = async () => {
     AsyncStorage.removeItem("userToken");
 
-    navigation.navigate("Login" as never);
+    navigation.navigate("Auth" as never);
   };
 
   const MenuItem = ({ icon, text, onPress }) => (
@@ -63,7 +71,7 @@ const ProfileScreen = () => {
       <ScrollView>
         <View style={styles.profileSection}>
           <Image
-            source={{ uri: "data:image/png;base64," + user.photo }} // Replace with actual image path
+            source={{ uri: "data:image/png;base64," + user.photo }}
             style={styles.profileImage}
           />
           <View style={{ flex: 1 }}>

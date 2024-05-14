@@ -6,15 +6,8 @@ import * as SplashScreen from "expo-splash-screen";
 
 //import main navigator
 SplashScreen.preventAutoHideAsync();
-setTimeout(SplashScreen.hideAsync, 800);
+setTimeout(SplashScreen.hideAsync, 200);
 export default function App() {
   return <MainNavigator />;
+  // return <AuthNavigator />;
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "grey",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

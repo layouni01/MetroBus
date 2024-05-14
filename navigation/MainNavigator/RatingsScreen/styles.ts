@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
   quickResponseContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: 12,
+    //marginBottom: 12,
+    padding: 10,
   },
   quickResponseButton: {
     padding: 10,

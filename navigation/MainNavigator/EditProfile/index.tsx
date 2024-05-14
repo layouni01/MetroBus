@@ -27,9 +27,9 @@ const EditProfile = () => {
     lastName: "",
     email: "",
     password: "",
-    photo: ""
+    photo: "",
   });
-  const [showPassword, setShowPassword] = useState(false);  // Correctly initialize here
+  const [showPassword, setShowPassword] = useState(false); // Correctly initialize here
 
   const handleChooseProfilePic = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -70,31 +70,29 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-
     const fetchUserData = async () => {
-
       try {
         const token = await AsyncStorage.getItem("userToken");
-        console.log("token:", token)
+        console.log("token:", token);
 
+        const response = await axios.get(`http://192.168.1.16:5000/user/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-        const response = await axios.get(`http://192.168.43.54:5000/user/user`, { headers: { Authorization: `Bearer ${token}` } });
-
-        console.log(response.data)
-        setUser({ ...user, name: response.data.name, lastName: response.data.lastName, email: response.data.email, photo: response.data.photo });
+        console.log(response.data);
+        setUser({
+          ...user,
+          name: response.data.name,
+          lastName: response.data.lastName,
+          email: response.data.email,
+          photo: response.data.photo,
+        });
       } catch (error) {
-
-        console.log(error.response.data)
+        console.log(error.response.data);
       }
     };
     fetchUserData();
-
   }, []);
-  ;
-
-
-
-
   const handleTextChange = async (name, value) => {
     setUser((prevState) => ({
       ...prevState,
@@ -102,31 +100,28 @@ const EditProfile = () => {
     }));
   };
 
-
-
-
   const toggleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   const handleSaveProfile = async () => {
-    console.log('user:', user)
+    console.log("user:", user);
     if (!user.email || !user.name || !user.lastName) {
       Alert.alert("Required fields", "All fields must be filled.");
     }
     try {
       const token = await AsyncStorage.getItem("userToken");
       console.log(token);
-      const res = await axios.put('http://192.168.43.54:5000/user/updateUser', user, { headers: { Authorization: `Bearer ${token}` } })
-      console.log(res.data)
+      const res = await axios.put(
+        "http://192.168.1.16:5000/user/updateUser",
+        user,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(res.data);
       Alert.alert("user is updated successfully!!");
     } catch (error) {
-      console.log(error.response.data)
+      console.log(error.response.data);
     }
-
-
-
-
   };
 
   return (
@@ -135,7 +130,10 @@ const EditProfile = () => {
         <ScrollView>
           <View>
             <TouchableOpacity onPress={handleChooseProfilePic}>
-              <Image source={{ uri: "data:image/png;base64," + user.photo }} style={styles.profilePic} />
+              <Image
+                source={{ uri: "data:image/png;base64," + user.photo }}
+                style={styles.profilePic}
+              />
               <View style={styles.cameraIcon}>
                 <FontAwesome name="camera" size={24} color="white" />
               </View>
@@ -155,7 +153,6 @@ const EditProfile = () => {
                 onChangeText={(text) => handleTextChange("name", text)}
                 value={user.name || ""}
               />
-
             </View>
             <View style={styles.inputView}>
               <Ionicons
@@ -170,7 +167,6 @@ const EditProfile = () => {
                 onChangeText={(text) => handleTextChange("lastName", text)}
                 value={user.lastName || ""}
               />
-
             </View>
             <View style={styles.inputView}>
               <Ionicons name="mail-outline" size={25} color={Colors.primary} />
@@ -194,7 +190,6 @@ const EditProfile = () => {
                 placeholder="Password"
                 placeholderTextColor="#4458"
                 onChangeText={(text) => handleTextChange("password", text)}
-
               />
               <Ionicons
                 name={showPassword ? "eye-outline" : "eye-off-outline"}
@@ -213,6 +208,5 @@ const EditProfile = () => {
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
-
-}
+};
 export default EditProfile;

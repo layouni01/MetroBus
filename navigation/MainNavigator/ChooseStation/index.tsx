@@ -26,11 +26,11 @@ const ChooseStation = () => {
   const [fromOptions, setFromOptions] = useState(stations);
   const [toOptions, setToOptions] = useState(stations);
   useEffect(() => {
-    console.log(AsyncStorage.getItem("userToken"))
+    console.log(AsyncStorage.getItem("userToken"));
     const fetchStations = async () => {
       try {
         const response = await axios.get(
-          "http://192.168.43.54:5000/station/getAllStations"
+          "http://192.168.1.16:5000/station/getAllStations"
         );
 
         setStations(
@@ -86,7 +86,7 @@ const ChooseStation = () => {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.content}>
-          <Text style={styles.title}>Tipe your destination for today ?</Text>
+          <Text style={styles.title}>Tipe your destination for today </Text>
 
           <Dropdown
             style={styles.dropDown}
